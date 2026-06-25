@@ -103,3 +103,19 @@ src/
     UserSettings.jsx     -- Profile, password, purge data
 test-result/             -- Test output artifacts
 ```
+
+---
+
+## Skills
+
+This section lists available development workflows and tools. For Copilot auto-trigger keywords and skill usage, see [copilot-instructions.md](copilot-instructions.md).
+
+### smart-commit
+
+**Description:** Incrementally stage and commit git changes grouped by logical context, with conventional commit messages.
+
+**Purpose:** Produces clean, readable git history where each commit is focused on one concern.
+
+**When to use:** User says "smart commit", "commit by context", "gradual commit", "group my changes", "split commits", "organize commits", or "help me commit".
+
+**Location:** [.agents/skills/smart-commit/SKILL.md](.agents/skills/smart-commit/SKILL.md)
