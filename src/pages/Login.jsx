@@ -62,7 +62,7 @@ export default function Login() {
   return (
     <div id="login-page" data-testid="login-page" className="flex-grow flex flex-col w-full h-full">
       <main className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
-        <div className="w-full max-w-md mx-auto">
+        <div className="w-full max-w-lg mx-auto">
           <div className="text-center mb-xl">
             <h1 id="login-title" data-testid="login-title" className="font-headline-lg text-headline-lg text-primary md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile mb-sm">
               ClinicFlow
@@ -150,25 +150,25 @@ export default function Login() {
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>info</span>
               <h3 className="font-label-md text-label-md">Test Credentials</h3>
             </div>
-            <div className="overflow-hidden rounded border border-outline-variant">
+            <div className="overflow-x-auto rounded border border-outline-variant">
               <table className="w-full text-left border-collapse font-body-sm text-body-sm">
                 <thead className="bg-surface-container-high text-on-surface-variant">
                   <tr>
-                    <th className="p-sm font-semibold border-b border-outline-variant">Role</th>
-                    <th className="p-sm font-semibold border-b border-outline-variant">Email</th>
-                    <th className="p-sm font-semibold border-b border-outline-variant">Password</th>
+                    <th className="px-md py-sm font-semibold border-b border-outline-variant whitespace-nowrap">Role</th>
+                    <th className="px-md py-sm font-semibold border-b border-outline-variant whitespace-nowrap">Email</th>
+                    <th className="px-md py-sm font-semibold border-b border-outline-variant whitespace-nowrap">Password</th>
                   </tr>
                 </thead>
                 <tbody className="bg-surface-container-lowest text-on-surface-variant">
                   <tr className="border-b border-outline-variant">
-                    <td className="p-sm font-bold text-on-surface align-top">Member</td>
-                    <td className="p-sm">johnyjohnyyespapa@mail.com</td>
-                    <td className="p-sm text-label-sm">EatingSugarNoPapa</td>
+                    <td className="px-md py-sm font-bold text-on-surface whitespace-nowrap">Member</td>
+                    <td className="px-md py-sm whitespace-nowrap">johnyjohnyyespapa@mail.com</td>
+                    <td className="px-md py-sm text-label-sm whitespace-nowrap">EatingSugarNoPapa</td>
                   </tr>
                   <tr className="border-b border-outline-variant last:border-0">
-                    <td className="p-sm font-bold text-on-surface align-top">Admin</td>
-                    <td className="p-sm">admin@example.com</td>
-                    <td className="p-sm text-label-sm">ThisIsNotAdmin</td>
+                    <td className="px-md py-sm font-bold text-on-surface whitespace-nowrap">Admin</td>
+                    <td className="px-md py-sm whitespace-nowrap">admin@example.com</td>
+                    <td className="px-md py-sm text-label-sm whitespace-nowrap">ThisIsNotAdmin</td>
                   </tr>
                 </tbody>
               </table>
