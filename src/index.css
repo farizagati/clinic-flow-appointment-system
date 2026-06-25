@@ -214,7 +214,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* react-day-picker theme variables overrides */
 .rdp-root {
   --rdp-accent-color: var(--color-primary) !important;
-  --rdp-accent-background-color: var(--color-secondary-container) !important;
+  --rdp-accent-background-color: var(--color-primary) !important;
   --rdp-today-color: var(--color-primary) !important;
   margin: 0 auto;
 }
