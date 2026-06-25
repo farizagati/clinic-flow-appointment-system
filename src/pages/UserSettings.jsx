@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import CustomDatePicker from '../components/CustomDatePicker';
 
 export default function UserSettings() {
   const { currentUser, users, updateUserSettings, purgeAndResetData } = useAuth();
@@ -28,47 +29,9 @@ export default function UserSettings() {
   // File upload Ref
   const fileInputRef = useRef(null);
 
-  // Date of birth Ref
-  const dobInputRef = useRef(null);
 
-  // Helper to convert date string "12 October 1985" to ISO format "1985-10-12"
-  const formatDateToISO = (dateStr) => {
-    if (!dateStr) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
 
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return '';
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  };
 
-  // Helper to convert ISO format "1985-10-12" to display string "12 October 1985"
-  const formatDateToDisplay = (dateStr) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return dateStr;
-
-    const day = date.getDate();
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-  };
-
-  const handleCalendarClick = () => {
-    if (dobInputRef.current) {
-      if (typeof dobInputRef.current.showPicker === 'function') {
-        dobInputRef.current.showPicker();
-      } else {
-        dobInputRef.current.focus();
-      }
-    }
-  };
 
   const startEditing = () => {
     setEditName(currentUser?.name || '');
@@ -479,21 +442,19 @@ export default function UserSettings() {
                     <div className="relative group">
                       <label className="absolute left-3 -top-2.5 bg-surface px-1 font-label-sm text-label-sm text-secondary group-focus-within:text-primary transition-all duration-200 z-10" htmlFor="dob">Date of Birth</label>
                       <div className="relative">
-                        <input
-                          className="w-full pl-4 pr-10 py-3 bg-transparent border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow [color-scheme:light] dark:[color-scheme:dark]"
+                        <CustomDatePicker
                           id="dob"
-                          ref={dobInputRef}
-                          data-testid="edit-profile-dob-input"
-                          type="date"
-                          value={formatDateToISO(editDob)}
-                          onChange={(e) => setEditDob(formatDateToDisplay(e.target.value))}
+                          dataTestId="edit-profile-dob-input"
+                          value={editDob}
+                          onChange={(val) => setEditDob(val)}
+                          formatStr="d MMMM yyyy"
+                          captionLayout="dropdown"
+                          startMonth={new Date(new Date().getFullYear() - 100, 0)}
+                          endMonth={new Date()}
+                          inputClassName="w-full pl-4 pr-10 py-3 bg-transparent border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow"
+                          containerClassName="w-full"
+                          label="Date of Birth"
                         />
-                        <span
-                          onClick={handleCalendarClick}
-                          className="material-symbols-outlined absolute right-3 top-3.5 text-secondary cursor-pointer hover:text-primary transition-colors"
-                        >
-                          calendar_today
-                        </span>
                       </div>
                     </div>
                     {/* Gender */}
