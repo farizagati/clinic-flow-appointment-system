@@ -40,6 +40,12 @@ export const AuthProvider = ({ children }) => {
         password: 'EatingSugarNoPapa',
         name: 'Johny Member',
         role: 'member',
+        gender: 'Female',
+        dob: '12 October 1985',
+        bloodType: 'O Negative',
+        address: '482 Clinical Heights Parkway, Suite 300, San Francisco, CA 94107',
+        emergencyName: 'Robert Sterling (Spouse)',
+        emergencyPhone: '+1 (555) 987-6543',
       },
       {
         id: 'user-admin-default',
@@ -47,6 +53,12 @@ export const AuthProvider = ({ children }) => {
         password: 'ThisIsNotAdmin',
         name: 'System Admin',
         role: 'admin',
+        gender: 'Male',
+        dob: '01 January 1980',
+        bloodType: 'AB Positive',
+        address: 'ClinicFlow HQ, 100 Main Street, San Francisco, CA 94102',
+        emergencyName: 'Jane Admin (Spouse)',
+        emergencyPhone: '+1 (555) 123-4567',
       },
     ];
 
@@ -113,6 +125,13 @@ export const AuthProvider = ({ children }) => {
       email: foundUser.email,
       name: foundUser.name,
       role: foundUser.role,
+      gender: foundUser.gender || 'Female',
+      dob: foundUser.dob || '12 October 1985',
+      bloodType: foundUser.bloodType || 'O Negative',
+      address: foundUser.address || '482 Clinical Heights Parkway, Suite 300, San Francisco, CA 94107',
+      emergencyName: foundUser.emergencyName || 'Robert Sterling (Spouse)',
+      emergencyPhone: foundUser.emergencyPhone || '+1 (555) 987-6543',
+      profilePic: foundUser.profilePic || null,
     };
     localStorage.setItem('clinicflow_currentUser', JSON.stringify(userSession));
     setCurrentUser(userSession);
@@ -138,6 +157,13 @@ export const AuthProvider = ({ children }) => {
       name,
       password,
       role,
+      gender: 'Female',
+      dob: '12 October 1985',
+      bloodType: 'O Negative',
+      address: '482 Clinical Heights Parkway, Suite 300, San Francisco, CA 94107',
+      emergencyName: 'Robert Sterling (Spouse)',
+      emergencyPhone: '+1 (555) 987-6543',
+      profilePic: null,
     };
     const updatedUsers = [...latestUsers, newUser];
     localStorage.setItem('clinicflow_users', JSON.stringify(updatedUsers));
@@ -219,7 +245,7 @@ export const AuthProvider = ({ children }) => {
     setAppointments(updated);
   };
 
-  const updateUserSettings = (newName, newPassword) => {
+  const updateUserSettings = (newName, newPassword, profileData = {}) => {
     if (!currentUser) throw new Error('Authentication required');
     
     let latestUsers = users;
@@ -237,6 +263,13 @@ export const AuthProvider = ({ children }) => {
           ...u,
           name: newName || u.name,
           password: newPassword || u.password,
+          gender: profileData.gender !== undefined ? profileData.gender : u.gender,
+          dob: profileData.dob !== undefined ? profileData.dob : u.dob,
+          bloodType: profileData.bloodType !== undefined ? profileData.bloodType : u.bloodType,
+          address: profileData.address !== undefined ? profileData.address : u.address,
+          emergencyName: profileData.emergencyName !== undefined ? profileData.emergencyName : u.emergencyName,
+          emergencyPhone: profileData.emergencyPhone !== undefined ? profileData.emergencyPhone : u.emergencyPhone,
+          profilePic: profileData.profilePic !== undefined ? profileData.profilePic : u.profilePic,
         };
       }
       return u;
@@ -248,6 +281,13 @@ export const AuthProvider = ({ children }) => {
     const updatedSession = {
       ...currentUser,
       name: newName || currentUser.name,
+      gender: profileData.gender !== undefined ? profileData.gender : currentUser.gender,
+      dob: profileData.dob !== undefined ? profileData.dob : currentUser.dob,
+      bloodType: profileData.bloodType !== undefined ? profileData.bloodType : currentUser.bloodType,
+      address: profileData.address !== undefined ? profileData.address : currentUser.address,
+      emergencyName: profileData.emergencyName !== undefined ? profileData.emergencyName : currentUser.emergencyName,
+      emergencyPhone: profileData.emergencyPhone !== undefined ? profileData.emergencyPhone : currentUser.emergencyPhone,
+      profilePic: profileData.profilePic !== undefined ? profileData.profilePic : currentUser.profilePic,
     };
     localStorage.setItem('clinicflow_currentUser', JSON.stringify(updatedSession));
     setCurrentUser(updatedSession);
@@ -325,6 +365,12 @@ export const AuthProvider = ({ children }) => {
         password: 'EatingSugarNoPapa',
         name: 'Johny Member',
         role: 'member',
+        gender: 'Female',
+        dob: '12 October 1985',
+        bloodType: 'O Negative',
+        address: '482 Clinical Heights Parkway, Suite 300, San Francisco, CA 94107',
+        emergencyName: 'Robert Sterling (Spouse)',
+        emergencyPhone: '+1 (555) 987-6543',
       },
       {
         id: 'user-admin-default',
@@ -332,6 +378,12 @@ export const AuthProvider = ({ children }) => {
         password: 'ThisIsNotAdmin',
         name: 'System Admin',
         role: 'admin',
+        gender: 'Male',
+        dob: '01 January 1980',
+        bloodType: 'AB Positive',
+        address: 'ClinicFlow HQ, 100 Main Street, San Francisco, CA 94102',
+        emergencyName: 'Jane Admin (Spouse)',
+        emergencyPhone: '+1 (555) 123-4567',
       },
     ];
 
