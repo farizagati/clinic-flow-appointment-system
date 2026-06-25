@@ -157,7 +157,9 @@
 /* Floating Label Styles for Book Appointment */
 .floating-input:focus-within label,
 .floating-input input:not(:placeholder-shown) + label,
-.floating-input select.has-value + label {
+.floating-input textarea:not(:placeholder-shown) + label,
+.floating-input select.has-value + label,
+.floating-input[data-open] label {
     transform: translateY(-50%) scale(0.85);
     top: 0;
     background-color: var(--color-surface-container-lowest, white);
@@ -165,7 +167,8 @@
     color: var(--color-on-surface-variant);
 }
 
-.floating-input:focus-within label {
+.floating-input:focus-within label,
+.floating-input[data-open] label {
     color: var(--color-primary);
 }
 
@@ -193,6 +196,84 @@
 .status-confirmed { background-color: rgba(0, 177, 79, 0.15); color: #00B14F; }
 .status-pending { background-color: rgba(245, 158, 11, 0.15); color: #F59E0B; }
 .status-cancelled { background-color: rgba(239, 68, 68, 0.15); color: #EF4444; }
+
+/* Date Input Styling to overlay native indicator */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+/* react-day-picker theme variables overrides */
+.rdp-root {
+  --rdp-accent-color: var(--color-primary) !important;
+  --rdp-accent-background-color: var(--color-secondary-container) !important;
+  --rdp-today-color: var(--color-primary) !important;
+  margin: 0 auto;
+}
+
+/* DayPicker navigation button alignments */
+.rdp-button_next,
+.rdp-button_previous {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.rdp-button_next:hover,
+.rdp-button_previous:hover {
+  background-color: var(--color-surface-container);
+}
+
+.rdp-day_button {
+  transition: all 0.2s;
+}
+
+.rdp-day_button:hover {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+  font-weight: 600;
+}
+
+.rdp-selected .rdp-day_button:hover {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+}
+
+.rdp-dropdown_root {
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 8px;
+  padding: 4px 12px;
+  background-color: var(--color-surface-container-lowest);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rdp-dropdown {
+  cursor: pointer;
+}
+
+.rdp-dropdowns {
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+
 
 
 

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { TIME_SLOTS } from '../data/mockData';
 import { FieldError } from '../components/FieldError';
+import CustomDatePicker from '../components/CustomDatePicker';
 
 export default function BookAppointment() {
   const { clinics, departments, doctors } = useAuth();
@@ -122,9 +123,9 @@ export default function BookAppointment() {
   return (
     <div id="book-appointment-page" data-testid="book-appointment-page" className="flex-grow flex flex-col w-full h-full">
       <main className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
-        <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] overflow-hidden relative z-[10]">
+        <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] relative z-[10]">
           {/* Decorative Header Accent */}
-          <div className="h-2 w-full bg-primary-container"></div>
+          <div className="h-2 w-full bg-primary-container rounded-t-xl"></div>
           
           <div className="p-lg md:p-xl">
             <div className="mb-gutter text-center">
@@ -238,24 +239,24 @@ export default function BookAppointment() {
 
                 {/* Date Picker */}
                 <div>
-                  <div className="floating-input relative">
-                    <input
-                      type="date"
-                      id="appointment-date"
-                      data-testid="appointment-date"
-                      value={date}
-                      onChange={(e) => { setDate(e.target.value); clearFieldError('date'); }}
-                      className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors peer [color-scheme:light] dark:[color-scheme:dark] ${
-                        fieldErrors.date ? 'input-error' : 'border-outline'
-                      }`}
-                      placeholder=" "
-                      aria-invalid={!!fieldErrors.date}
-                      aria-describedby={fieldErrors.date ? 'appointment-date-error' : undefined}
-                    />
-                    <label htmlFor="appointment-date" className="absolute left-3 top-0 -translate-y-1/2 scale-85 bg-surface-container-lowest px-1 rounded-sm font-body-md text-body-md text-on-surface-variant peer-focus:text-primary transition-all pointer-events-none z-10">
-                      Appointment Date *
-                    </label>
-                  </div>
+                  <CustomDatePicker
+                    id="appointment-date"
+                    dataTestId="appointment-date"
+                    value={date}
+                    onChange={(val) => { setDate(val); clearFieldError('date'); }}
+                    formatStr="yyyy-MM-dd"
+                    disabled={{ before: new Date() }}
+                    captionLayout="dropdown"
+                    startMonth={new Date()}
+                    endMonth={new Date(new Date().getFullYear() + 2, 11)}
+                    inputClassName={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors peer [color-scheme:light] dark:[color-scheme:dark] ${
+                      fieldErrors.date ? 'input-error' : 'border-outline'
+                    }`}
+                    containerClassName="w-full"
+                    label="Appointment Date *"
+                    isFloatingLabel={true}
+                    error={!!fieldErrors.date}
+                  />
                   <FieldError message={fieldErrors.date} fieldId="appointment-date" />
                 </div>
 
@@ -298,7 +299,7 @@ export default function BookAppointment() {
                     className="w-full p-4 bg-transparent border border-outline rounded-lg text-on-surface focus:outline-none transition-colors peer resize-none h-24"
                     placeholder=" "
                   ></textarea>
-                  <label htmlFor="appointment-notes" className="absolute left-3 top-4 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm bg-surface-container-lowest peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-primary peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-85">
+                  <label htmlFor="appointment-notes" className="absolute left-3 top-0 -translate-y-1/2 scale-85 bg-surface-container-lowest px-1 rounded-sm font-body-md text-body-md text-on-surface-variant transition-all duration-200 pointer-events-none peer-placeholder-shown:top-4 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-primary">
                     Reason / Notes (Optional)
                   </label>
                 </div>
