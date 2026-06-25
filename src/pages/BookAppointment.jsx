@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { CLINICS, DEPARTMENTS, DOCTORS, TIME_SLOTS } from '../data/mockData';
+import { TIME_SLOTS } from '../data/mockData';
 import { FieldError } from '../components/FieldError';
 
 export default function BookAppointment() {
-  const { bookAppointment } = useAuth();
+  const { clinics, departments, doctors } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [clinic, setClinic] = useState('');
-  const [department, setDepartment] = useState('');
-  const [doctor, setDoctor] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [notes, setNotes] = useState('');
+  const [clinic, setClinic] = useState(location.state?.clinic || '');
+  const [department, setDepartment] = useState(location.state?.department || '');
+  const [doctor, setDoctor] = useState(location.state?.doctor || '');
+  const [date, setDate] = useState(location.state?.date || '');
+  const [time, setTime] = useState(location.state?.time || '');
+  const [notes, setNotes] = useState(location.state?.notes || '');
 
-  const [filteredDoctors, setFilteredDoctors] = useState(DOCTORS);
+  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
   const [error, setError] = useState(''); // top-level server/auth error
   const [success, setSuccess] = useState('');
   const [fieldErrors, setFieldErrors] = useState({
@@ -28,7 +29,7 @@ export default function BookAppointment() {
 
   // Dynamic doctor filtering based on clinic and department
   useEffect(() => {
-    let result = DOCTORS;
+    let result = doctors;
     if (clinic) {
       result = result.filter((d) => d.clinicId === clinic);
     }
@@ -88,32 +89,26 @@ export default function BookAppointment() {
     if (!validate()) return;
 
     try {
-      const selectedClinicObj = CLINICS.find((c) => c.id === clinic);
-      const selectedDepartmentObj = DEPARTMENTS.find((s) => s.id === department);
-      const selectedDoctorObj = DOCTORS.find((d) => d.id === doctor);
+      const selectedClinicObj = clinics.find((c) => c.id === clinic);
+      const selectedDepartmentObj = departments.find((s) => s.id === department);
+      const selectedDoctorObj = doctors.find((d) => d.id === doctor);
 
-      bookAppointment({
-        clinic: selectedClinicObj.name,
-        department: selectedDepartmentObj.name,
-        doctor: selectedDoctorObj.name,
-        date,
-        time,
-        notes,
+      // Navigate to review screen
+      navigate('/book-appointment/review', {
+        state: {
+          clinic,
+          clinicName: selectedClinicObj.name,
+          department,
+          departmentName: selectedDepartmentObj.name,
+          doctor,
+          doctorName: selectedDoctorObj.name,
+          date,
+          time,
+          notes,
+        },
       });
-
-      setSuccess('Appointment successfully booked!');
-      setClinic('');
-      setDepartment('');
-      setDoctor('');
-      setDate('');
-      setTime('');
-      setNotes('');
-
-      setTimeout(() => {
-        navigate('/my-appointments');
-      }, 2000);
     } catch (err) {
-      setError(err.message || 'Failed to book appointment');
+      setError(err.message || 'Failed to proceed to review');
     }
   };
 
@@ -171,7 +166,7 @@ export default function BookAppointment() {
                       aria-describedby={fieldErrors.clinic ? 'appointment-clinic-error' : undefined}
                     >
                       <option value="" disabled hidden></option>
-                      {CLINICS.map((c) => (
+                      {clinics.map((c) => (
                         <option key={c.id} value={c.id}>{c.name}</option>
                       ))}
                     </select>
@@ -200,7 +195,7 @@ export default function BookAppointment() {
                       aria-describedby={fieldErrors.department ? 'appointment-department-error' : undefined}
                     >
                       <option value="" disabled hidden></option>
-                      {DEPARTMENTS.map((s) => (
+                      {departments.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
                     </select>
@@ -321,11 +316,11 @@ export default function BookAppointment() {
                 </button>
                 <button
                   type="submit"
-                  id="appointment-submit"
-                  data-testid="appointment-submit"
+                  id="appointment-review-submit"
+                  data-testid="appointment-review-submit"
                   className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
                 >
-                  Book Appointment
+                  Review Appointment
                   <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
               </div>
