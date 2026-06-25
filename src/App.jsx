@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import BookAppointment from './pages/BookAppointment';
+import ReviewAppointment from './pages/ReviewAppointment';
 import MyAppointments from './pages/MyAppointments';
 import AdminDashboard from './pages/AdminDashboard';
 import UserSettings from './pages/UserSettings';
@@ -58,6 +59,14 @@ export default function App() {
             element={
               <MemberRoute>
                 <BookAppointment />
+              </MemberRoute>
+            }
+          />
+          <Route
+            path="book-appointment/review"
+            element={
+              <MemberRoute>
+                <ReviewAppointment />
               </MemberRoute>
             }
           />

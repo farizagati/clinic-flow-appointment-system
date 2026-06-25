@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { CLINICS, DEPARTMENTS, DOCTORS } from '../data/mockData';
 
 const AuthContext = createContext(null);
 
@@ -252,11 +253,109 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(updatedSession);
   };
 
+  const [clinics, setClinics] = useState(() => {
+    try {
+      const stored = localStorage.getItem('clinicflow_clinics');
+      if (stored) return JSON.parse(stored);
+      localStorage.setItem('clinicflow_clinics', JSON.stringify(CLINICS));
+      return CLINICS;
+    } catch {
+      return CLINICS;
+    }
+  });
+
+  const [departments, setDepartments] = useState(() => {
+    try {
+      const stored = localStorage.getItem('clinicflow_departments');
+      if (stored) return JSON.parse(stored);
+      localStorage.setItem('clinicflow_departments', JSON.stringify(DEPARTMENTS));
+      return DEPARTMENTS;
+    } catch {
+      return DEPARTMENTS;
+    }
+  });
+
+  const [doctors, setDoctors] = useState(() => {
+    try {
+      const stored = localStorage.getItem('clinicflow_doctors');
+      if (stored) return JSON.parse(stored);
+      localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
+      return DOCTORS;
+    } catch {
+      return DOCTORS;
+    }
+  });
+
+  const addDepartment = (name) => {
+    const newDept = {
+      id: `dept-${Date.now()}`,
+      name
+    };
+    const updated = [...departments, newDept];
+    setDepartments(updated);
+    localStorage.setItem('clinicflow_departments', JSON.stringify(updated));
+    return newDept;
+  };
+
+  const addDoctor = (name, departmentId, clinicId) => {
+    const newDoc = {
+      id: `dr-${Date.now()}`,
+      name,
+      departmentId,
+      clinicId
+    };
+    const updated = [...doctors, newDoc];
+    setDoctors(updated);
+    localStorage.setItem('clinicflow_doctors', JSON.stringify(updated));
+    return newDoc;
+  };
+
+  const purgeAndResetData = () => {
+    localStorage.removeItem('clinicflow_currentUser');
+    localStorage.removeItem('clinicflow_users');
+    localStorage.removeItem('clinicflow_appointments');
+    localStorage.removeItem('clinicflow_clinics');
+    localStorage.removeItem('clinicflow_departments');
+    localStorage.removeItem('clinicflow_doctors');
+
+    const defaultUsers = [
+      {
+        id: 'user-member-default',
+        email: 'johnyjohnyyespapa@mail.com',
+        password: 'EatingSugarNoPapa',
+        name: 'Johny Member',
+        role: 'member',
+      },
+      {
+        id: 'user-admin-default',
+        email: 'admin@example.com',
+        password: 'ThisIsNotAdmin',
+        name: 'System Admin',
+        role: 'admin',
+      },
+    ];
+
+    localStorage.setItem('clinicflow_users', JSON.stringify(defaultUsers));
+    localStorage.setItem('clinicflow_clinics', JSON.stringify(CLINICS));
+    localStorage.setItem('clinicflow_departments', JSON.stringify(DEPARTMENTS));
+    localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
+
+    setCurrentUser(null);
+    setUsers(defaultUsers);
+    setAppointments([]);
+    setClinics(CLINICS);
+    setDepartments(DEPARTMENTS);
+    setDoctors(DOCTORS);
+  };
+
   return (
     <AuthContext value={{
       currentUser,
       users,
       appointments,
+      clinics,
+      departments,
+      doctors,
       login,
       register,
       logout,
@@ -264,7 +363,10 @@ export const AuthProvider = ({ children }) => {
       cancelAppointment,
       updateAppointmentStatus,
       updateUserSettings,
-      refreshUsersList
+      refreshUsersList,
+      addDepartment,
+      addDoctor,
+      purgeAndResetData
     }}>
       {children}
     </AuthContext>
