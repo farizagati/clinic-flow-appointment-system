@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function UserSettings() {
-  const { currentUser, updateUserSettings } = useAuth();
+  const { currentUser, updateUserSettings, purgeAndResetData } = useAuth();
   
   const [name, setName] = useState(currentUser?.name || '');
   const [password, setPassword] = useState('');
@@ -33,6 +33,20 @@ export default function UserSettings() {
       setConfirmPassword('');
     } catch (err) {
       setError(err.message || 'Failed to update settings');
+    }
+  };
+
+  const handlePurge = () => {
+    setError('');
+    setSuccess('');
+    try {
+      purgeAndResetData();
+      setSuccess('All data cleared and reset to defaults successfully!');
+      setTimeout(() => {
+        window.location.hash = '/login';
+      }, 1000);
+    } catch (err) {
+      setError(err.message || 'Failed to purge data');
     }
   };
 
@@ -163,9 +177,14 @@ export default function UserSettings() {
             <div className="p-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-md">
               <div>
                 <p className="font-body-md text-body-md text-on-surface font-medium">Purge Local Storage Data</p>
-                <p className="font-body-sm text-body-sm text-secondary mt-1">This will permanently clear all cached application data on this device. It will not delete your account.</p>
+                <p className="font-body-sm text-body-sm text-secondary mt-1">This will clear all custom data (users, appointments, clinics, doctors) and reset the app back to mock defaults.</p>
               </div>
-              <button id="btn-purge-data" data-testid="purge-data-btn" className="shrink-0 bg-error text-on-error font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-error/90 transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:outline-none flex items-center gap-2">
+              <button 
+                id="btn-purge-data" 
+                data-testid="purge-data-btn" 
+                onClick={handlePurge}
+                className="shrink-0 bg-error text-on-error font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-error/90 transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:outline-none flex items-center gap-2"
+              >
                 <span className="material-symbols-outlined text-sm">delete_forever</span>
                 Purge Data
               </button>
