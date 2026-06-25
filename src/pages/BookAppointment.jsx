@@ -298,7 +298,7 @@ export default function BookAppointment() {
                     className="w-full p-4 bg-transparent border border-outline rounded-lg text-on-surface focus:outline-none transition-colors peer resize-none h-24"
                     placeholder=" "
                   ></textarea>
-                  <label htmlFor="appointment-notes" className="absolute left-3 top-4 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm bg-surface-container-lowest peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-primary peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-85">
+                  <label htmlFor="appointment-notes" className="absolute left-3 top-0 -translate-y-1/2 scale-85 bg-surface-container-lowest px-1 rounded-sm font-body-md text-body-md text-on-surface-variant transition-all duration-200 pointer-events-none peer-placeholder-shown:top-4 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-primary">
                     Reason / Notes (Optional)
                   </label>
                 </div>

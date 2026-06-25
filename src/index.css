@@ -157,6 +157,7 @@
 /* Floating Label Styles for Book Appointment */
 .floating-input:focus-within label,
 .floating-input input:not(:placeholder-shown) + label,
+.floating-input textarea:not(:placeholder-shown) + label,
 .floating-input select.has-value + label {
     transform: translateY(-50%) scale(0.85);
     top: 0;
@@ -193,6 +194,21 @@
 .status-confirmed { background-color: rgba(0, 177, 79, 0.15); color: #00B14F; }
 .status-pending { background-color: rgba(245, 158, 11, 0.15); color: #F59E0B; }
 .status-cancelled { background-color: rgba(239, 68, 68, 0.15); color: #EF4444; }
+
+/* Date Input Styling to overlay native indicator */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
 
 
 
