@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import Navigation from './Navigation';
 
 export default function Layout() {
@@ -20,10 +20,10 @@ export default function Layout() {
           </span>
         </div>
         <div className="flex flex-wrap justify-center md:justify-end gap-md">
-          <a className="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" href="#">Privacy Policy</a>
-          <a className="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" href="#">Terms of Service</a>
-          <a className="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" href="#">Contact Support</a>
-          <a className="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" href="#">Help Center</a>
+          <Link data-testid="footer-privacy-link" className="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" to="/privacy-policy">Privacy Policy</Link>
+          <Link data-testid="footer-terms-link" className="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" to="/terms-of-service">Terms of Service</Link>
+          <Link data-testid="footer-support-link" className="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" to="/contact-support">Contact Support</Link>
+          <Link data-testid="footer-help-link" className="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-inverse-primary hover:underline transition-opacity duration-200" to="/help-center">Help Center</Link>
         </div>
       </footer>
     </div>

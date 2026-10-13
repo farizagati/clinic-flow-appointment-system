@@ -101,6 +101,7 @@ src/
     MyAppointments.jsx   -- Patient appointment list
     AdminDashboard.jsx   -- Admin panel (stats, approve/cancel)
     UserSettings.jsx     -- Profile, password, purge data
+    InfoPage.jsx         -- Footer info pages (privacy, terms, support, help)
 test-result/             -- Test output artifacts
 ```
 
