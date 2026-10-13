@@ -234,6 +234,11 @@ export default function BookAppointment() {
                     </label>
                     <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
+                  {clinic && department && filteredDoctors.length === 0 && (
+                    <p data-testid="appointment-doctor-empty" className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                      No doctors available for this clinic and department.
+                    </p>
+                  )}
                   <FieldError message={fieldErrors.doctor} fieldId="appointment-doctor" />
                 </div>
 

@@ -50,7 +50,10 @@ export default function Home() {
                 }
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
-              <button className="px-lg py-md bg-surface text-on-surface border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 flex items-center justify-center">
+              <button
+                data-testid="home-learn-more-btn"
+                onClick={() => document.getElementById('home-features')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-lg py-md bg-surface text-on-surface border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 flex items-center justify-center">
                 Learn More
               </button>
             </div>
