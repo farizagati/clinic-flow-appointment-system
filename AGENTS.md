@@ -11,7 +11,7 @@
 
 **ClinicFlow Appointment System** is a React + Vite + Tailwind CSS single-page application
 that simulates a healthcare appointment booking workflow. It uses HashRouter for client-side
-routing (base path `/clinicflowapp/`), localStorage for all persistence (no backend), and
+routing (base path `/clinic-flow-appointment-system/`), localStorage for all persistence (no backend), and
 role-based route guards (member vs admin).
 
 **This application exists as a test automation sandbox / playground.** Its primary purpose is
@@ -67,7 +67,7 @@ Do not add new npm packages without explicit user approval. The current stack
 | Item                | Detail                                                |
 | ------------------- | ----------------------------------------------------- |
 | Dev server          | `npm run dev` (Vite, default port 5173)               |
-| App URL             | `http://localhost:5173/clinicflowapp/#/`               |
+| App URL             | `http://localhost:5173/clinic-flow-appointment-system/#/`               |
 | Build               | `npm run build` (outputs to `dist/`)                  |
 | Routing             | HashRouter (`/#/login`, `/#/book-appointment`, etc.)  |
 | Auth                | localStorage-based, see `src/contexts/AuthContext.jsx`|

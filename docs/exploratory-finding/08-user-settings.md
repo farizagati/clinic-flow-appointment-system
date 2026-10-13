@@ -47,6 +47,7 @@ Low (cosmetic, polish, convention violation).
 - Type: Dead control
 - Actual: The button (`download-records-btn`) has no `onClick`. No file, no message.
 - Also: In dark theme its label (dark green on dark) is low contrast and looks disabled.
+- Resolution: Button downloads `clinicflow-medical-records-YYYY-MM-DD.pdf` built by `src/services/medicalRecords.js` and shows the `settings-success` banner (`src/pages/UserSettings.jsx`). Dark-theme contrast fixed by the dark `--color-primary` token (`src/index.css`).
 
 ## EF-049 - Purge Data runs immediately with no confirmation (any role)
 

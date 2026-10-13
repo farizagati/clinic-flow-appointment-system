@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Open your browser and navigate to `http://localhost:5173/clinicflowapp/` (or the URL printed in your terminal).
+Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system/` (or the URL printed in your terminal).
 
 ### 🔑 Test Accounts
 The application is pre-seeded with mock data. Use the following credentials to test different user roles:
@@ -69,7 +69,7 @@ Below is an overview of the key files and directories:
 clinic-flow-appointment-system/
 ├── index.html                  # Main entry page structure and font imports
 ├── package.json                # Project dependencies and npm scripts
-├── vite.config.js              # Vite configuration (sets base path to /clinicflowapp/)
+├── vite.config.js              # Vite configuration (sets base path to /clinic-flow-appointment-system/)
 ├── tailwind.config.js          # Custom Tailwind configuration (colors, spacing, typography)
 ├── postcss.config.js           # PostCSS setup
 └── src/

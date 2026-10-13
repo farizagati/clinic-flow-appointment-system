@@ -101,6 +101,12 @@ Acceptance:
 
 ### 2b. "Download Medical Records" (`src/pages/UserSettings.jsx`)
 
+> Resolved (EF-048): implemented as a PDF download instead of the JSON export described below.
+> `src/services/medicalRecords.js` exposes `getMedicalRecordsPdf(user, appointments)` (returns a
+> `Blob`, built with jsPDF for now) and `saveBlob(blob, filename)`. File name:
+> `clinicflow-medical-records-YYYY-MM-DD.pdf`. When the backend lands, replace the body of
+> `getMedicalRecordsPdf` with a fetch to `GET /api/me/medical-records.pdf` and drop jspdf.
+
 - Add `onClick={handleDownloadRecords}` to the existing `download-records-btn` button.
 - Handler builds an object with:
   - `profile`: `currentUser` fields except `profilePic` (the avatar can be megabytes of base64);
