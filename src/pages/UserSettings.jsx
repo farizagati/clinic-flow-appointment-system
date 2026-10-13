@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import CustomDatePicker from '../components/CustomDatePicker';
+import { getMedicalRecordsPdf, saveBlob } from '../services/medicalRecords';
 
 export default function UserSettings() {
-  const { currentUser, users, updateUserSettings, purgeAndResetData } = useAuth();
+  const { currentUser, users, appointments, updateUserSettings, purgeAndResetData } = useAuth();
 
   // Mode state: 'view', 'edit', 'password'
   const [viewMode, setViewMode] = useState('view');
@@ -25,6 +26,8 @@ export default function UserSettings() {
   // General Alert States
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const [downloading, setDownloading] = useState(false);
 
   // File upload Ref
   const fileInputRef = useRef(null);
@@ -141,6 +144,22 @@ export default function UserSettings() {
       setViewMode('view');
     } catch (err) {
       setError(err.message || 'Failed to change password');
+    }
+  };
+
+  const handleDownloadRecords = async () => {
+    setError('');
+    setSuccess('');
+    setDownloading(true);
+    try {
+      const mine = appointments.filter((a) => a.userId === currentUser.id);
+      const blob = await getMedicalRecordsPdf(currentUser, mine);
+      saveBlob(blob, `clinicflow-medical-records-${new Date().toISOString().slice(0, 10)}.pdf`);
+      setSuccess('Medical records downloaded');
+    } catch (err) {
+      setError(err.message || 'Failed to download medical records');
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -380,9 +399,11 @@ export default function UserSettings() {
                     <button
                       id="btn-download-records"
                       data-testid="download-records-btn"
+                      onClick={handleDownloadRecords}
+                      disabled={downloading}
                       className="bg-surface text-primary border border-primary font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-primary-container/10 transition-colors focus-ring-subtle flex items-center gap-2"
                     >
-                      <span className="material-symbols-outlined text-sm">download</span>Download Medical Records
+                      <span className="material-symbols-outlined text-sm">download</span>{downloading ? 'Preparing...' : 'Download Medical Records'}
                     </button>
                   </div>
                 </section>
