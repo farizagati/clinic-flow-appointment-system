@@ -389,7 +389,8 @@ export default function MyAppointments() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination (hidden when there are no results) */}
+        {filteredAppointments.length > 0 && (
         <div
           className="p-md border-t border-outline-variant bg-surface-bright flex flex-col sm:flex-row justify-between items-center gap-md font-body-sm text-body-sm text-secondary rounded-b-xl"
           data-testid="pagination-container"
@@ -448,6 +449,7 @@ export default function MyAppointments() {
             </button>
           </div>
         </div>
+        )}
       </div>
     </div>
   );

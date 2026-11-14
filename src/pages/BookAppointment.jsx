@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { TIME_SLOTS } from '../data/mockData';
 import { FieldError } from '../components/FieldError';
 import CustomDatePicker from '../components/CustomDatePicker';
+import SearchDropdown from '../components/SearchDropdown';
 
 export default function BookAppointment() {
   const { clinics, departments, doctors } = useAuth();
@@ -210,30 +211,31 @@ export default function BookAppointment() {
 
                 {/* Doctor Selection */}
                 <div>
-                  <div className="floating-input relative">
-                    <select
-                      id="appointment-doctor"
-                      data-testid="appointment-doctor"
-                      value={doctor}
-                      onChange={(e) => { setDoctor(e.target.value); clearFieldError('doctor'); }}
-                      className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
-                        doctor ? 'has-value' : ''
-                      } ${
-                        fieldErrors.doctor ? 'input-error' : 'border-outline'
-                      }`}
-                      aria-invalid={!!fieldErrors.doctor}
-                      aria-describedby={fieldErrors.doctor ? 'appointment-doctor-error' : undefined}
-                    >
-                      <option value="" disabled hidden></option>
-                      {filteredDoctors.map((d) => (
-                        <option key={d.id} value={d.id}>{d.name}</option>
-                      ))}
-                    </select>
-                    <label htmlFor="appointment-doctor" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
-                      Select Doctor *
-                    </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
-                  </div>
+                  <SearchDropdown
+                    id="appointment-doctor"
+                    dataTestId="appointment-doctor"
+                    label="Search Doctor *"
+                    options={filteredDoctors.map((d) => ({
+                      id: d.id,
+                      name: d.name,
+                      meta: [
+                        departments.find((dep) => dep.id === d.departmentId)?.name,
+                        clinics.find((c) => c.id === d.clinicId)?.name,
+                      ].filter(Boolean).join(' - '),
+                    }))}
+                    value={doctor}
+                    onChange={(id) => { setDoctor(id); if (id) clearFieldError('doctor'); }}
+                    debounceMs={400}
+                    error={!!fieldErrors.doctor}
+                    describedBy={fieldErrors.doctor ? 'appointment-doctor-error' : undefined}
+                    emptyText="No doctors match your search"
+                    noOptionsText="No doctors available for this clinic and department."
+                  />
+                  {clinic && department && filteredDoctors.length === 0 && (
+                    <p data-testid="appointment-doctor-unavailable" className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                      No doctors available for this clinic and department.
+                    </p>
+                  )}
                   <FieldError message={fieldErrors.doctor} fieldId="appointment-doctor" />
                 </div>
 

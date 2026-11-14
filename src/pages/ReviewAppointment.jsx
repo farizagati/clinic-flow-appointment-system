@@ -172,7 +172,7 @@ export default function ReviewAppointment() {
               disabled={isSubmitting || !!success}
               id="confirm-booking"
               data-testid="confirm-booking"
-              className="w-full sm:w-auto px-8 py-3 rounded-lg font-label-md text-label-md text-white bg-primary hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#00B14F]/40 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center gap-2 disabled:opacity-50" 
+              className="w-full sm:w-auto px-8 py-3 rounded-lg font-label-md text-label-md text-on-primary bg-primary hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#00B14F]/40 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center gap-2 disabled:opacity-50" 
             >
               <span className="material-symbols-outlined text-sm">check_circle</span>
               Confirm & Book Appointment

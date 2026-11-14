@@ -318,7 +318,18 @@ export const AuthProvider = ({ children }) => {
   const [doctors, setDoctors] = useState(() => {
     try {
       const stored = localStorage.getItem('clinicflow_doctors');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        // Seed doctors always come from mockData, so renamed, added or removed
+        // seed entries reach browsers with older data. Doctors created by the
+        // admin (ids like dr-1700000000000) are kept.
+        const parsed = JSON.parse(stored);
+        const adminCreated = parsed.filter((d) => /^dr-\d+$/.test(d.id));
+        const merged = [...DOCTORS, ...adminCreated];
+        if (JSON.stringify(merged) !== stored) {
+          localStorage.setItem('clinicflow_doctors', JSON.stringify(merged));
+        }
+        return merged;
+      }
       localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
       return DOCTORS;
     } catch {
