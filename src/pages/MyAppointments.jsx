@@ -179,7 +179,7 @@ export default function MyAppointments() {
           onClick={() => navigate('/book-appointment')}
           className="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2 active:scale-95"
         >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
+          <span aria-hidden="true" className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
           New Appointment
         </button>
       </div>
@@ -189,7 +189,7 @@ export default function MyAppointments() {
         {/* Table Controls */}
         <div className="p-md border-b border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-md bg-surface-bright rounded-t-xl">
           <div className="relative w-full sm:w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+            <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
             <input
               type="text"
               data-testid="search-input"
@@ -209,7 +209,7 @@ export default function MyAppointments() {
                   : 'border-outline text-on-surface hover:bg-surface-variant'
               }`}
             >
-              <span className="material-symbols-outlined text-sm">filter_list</span> Filter
+              <span aria-hidden="true" className="material-symbols-outlined text-sm">filter_list</span> Filter
             </button>
           </div>
         </div>
@@ -359,7 +359,7 @@ export default function MyAppointments() {
                         data-testid={`appointment-status-${apt.id}`}
                         className={`px-2 py-1 rounded-full font-label-sm inline-flex items-center gap-1 ${getStatusClass(apt.status)}`}
                       >
-                        <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        <span aria-hidden="true" className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                           {getStatusIcon(apt.status)}
                         </span>
                         {apt.status}
@@ -373,7 +373,7 @@ export default function MyAppointments() {
                           onClick={() => cancelAppointment(apt.id)}
                           className="text-error hover:bg-error-container p-1 px-3 rounded-md transition-colors flex items-center gap-1 ml-auto font-label-sm text-label-sm"
                         >
-                          <span className="material-symbols-outlined text-sm">cancel</span>
+                          <span aria-hidden="true" className="material-symbols-outlined text-sm">cancel</span>
                           Cancel
                         </button>
                       ) : (
@@ -416,7 +416,7 @@ export default function MyAppointments() {
               disabled={safePage === 1}
               className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <span className="material-symbols-outlined">chevron_left</span>
+              <span aria-hidden="true" className="material-symbols-outlined">chevron_left</span>
             </button>
 
             {getPageNumbers().map((page, idx) =>
@@ -445,7 +445,7 @@ export default function MyAppointments() {
               disabled={safePage === totalPages}
               className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <span className="material-symbols-outlined">chevron_right</span>
+              <span aria-hidden="true" className="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
         </div>

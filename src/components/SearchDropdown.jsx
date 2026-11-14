@@ -243,7 +243,7 @@ export default function SearchDropdown({
             onClick={handleClear}
             className="p-1 rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[20px]">close</span>
           </button>
         )}
         <button
@@ -262,7 +262,7 @@ export default function SearchDropdown({
           }}
           className="p-1 rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center"
         >
-          <span className={`material-symbols-outlined transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+          <span aria-hidden="true" className={`material-symbols-outlined transition-transform ${isOpen ? 'rotate-180' : ''}`}>
             expand_more
           </span>
         </button>
@@ -334,7 +334,7 @@ export default function SearchDropdown({
                       </span>
                     )}
                   </div>
-                  {isSelected && <span className="material-symbols-outlined text-[18px]">check</span>}
+                  {isSelected && <span aria-hidden="true" className="material-symbols-outlined text-[18px]">check</span>}
                 </li>
               );
             })

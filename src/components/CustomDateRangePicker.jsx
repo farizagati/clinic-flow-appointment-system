@@ -196,7 +196,7 @@ export default function CustomDateRangePicker({
         className="flex items-center justify-between border border-outline rounded-lg px-3 py-2 bg-surface hover:border-primary focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary transition-colors cursor-pointer w-full text-on-surface"
       >
         <div className="flex items-center min-w-0 flex-1">
-          <span className="material-symbols-outlined text-secondary mr-2 text-[20px] flex-shrink-0">calendar_today</span>
+          <span aria-hidden="true" className="material-symbols-outlined text-secondary mr-2 text-[20px] flex-shrink-0">calendar_today</span>
           <div className="flex items-center gap-1 font-body-sm min-w-0 flex-1">
             <span
               className={`truncate ${value?.from ? 'text-on-surface font-medium' : 'text-secondary'}`}
@@ -224,7 +224,7 @@ export default function CustomDateRangePicker({
             className="ml-2 flex-shrink-0 text-secondary hover:text-error transition-colors"
             aria-label="Clear date range"
           >
-            <span className="material-symbols-outlined text-[18px]">close</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">close</span>
           </button>
         )}
       </div>
@@ -245,7 +245,7 @@ export default function CustomDateRangePicker({
                 : 'bg-surface-container-low text-on-surface-variant'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">
+            <span aria-hidden="true" className="material-symbols-outlined text-[16px]">
               {isRangeComplete ? 'check_circle' : draftRange?.from ? 'radio_button_checked' : 'radio_button_unchecked'}
             </span>
             <span>{getHintLabel()}</span>

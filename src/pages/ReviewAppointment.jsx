@@ -84,7 +84,7 @@ export default function ReviewAppointment() {
             {/* Patient Info */}
             <div className="space-y-md">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">person</span>
+                <span aria-hidden="true" className="material-symbols-outlined">person</span>
                 <h2 className="font-headline-sm text-headline-sm">Patient Information</h2>
               </div>
               <div className="bg-surface rounded-lg p-md border border-outline-variant/20 shadow-sm space-y-sm">
@@ -103,7 +103,7 @@ export default function ReviewAppointment() {
             {/* Clinical Details */}
             <div className="space-y-md">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">stethoscope</span>
+                <span aria-hidden="true" className="material-symbols-outlined">stethoscope</span>
                 <h2 className="font-headline-sm text-headline-sm">Clinical Details</h2>
               </div>
               <div className="bg-surface rounded-lg p-md border border-outline-variant/20 shadow-sm space-y-sm">
@@ -126,14 +126,14 @@ export default function ReviewAppointment() {
                   <div className="flex-1">
                     <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-1">Date</span>
                     <span className="font-body-md text-body-md text-on-surface flex items-center gap-1" id="review-date" data-testid="review-date">
-                      <span className="material-symbols-outlined text-sm text-secondary">calendar_today</span> 
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm text-secondary">calendar_today</span> 
                       {date}
                     </span>
                   </div>
                   <div className="flex-1">
                     <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-1">Time</span>
                     <span className="font-body-md text-body-md text-on-surface flex items-center gap-1" id="review-time" data-testid="review-time">
-                      <span className="material-symbols-outlined text-sm text-secondary">schedule</span> 
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm text-secondary">schedule</span> 
                       {time}
                     </span>
                   </div>
@@ -144,7 +144,7 @@ export default function ReviewAppointment() {
             {/* Status / Documents */}
             <div className="md:col-span-2 space-y-md pt-md border-t border-outline-variant/30">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">assignment</span>
+                <span aria-hidden="true" className="material-symbols-outlined">assignment</span>
                 <h2 className="font-headline-sm text-headline-sm">Visit Context</h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-md">
@@ -174,7 +174,7 @@ export default function ReviewAppointment() {
               data-testid="confirm-booking"
               className="w-full sm:w-auto px-8 py-3 rounded-lg font-label-md text-label-md text-on-primary bg-primary hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#00B14F]/40 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center gap-2 disabled:opacity-50" 
             >
-              <span className="material-symbols-outlined text-sm">check_circle</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-sm">check_circle</span>
               Confirm & Book Appointment
             </button>
           </div>

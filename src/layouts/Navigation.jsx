@@ -65,7 +65,7 @@ export default function Navigation() {
               {currentUser.name} ({currentUser.role})
             </span>
             <Link to="/settings" id="nav-settings" data-testid="nav-settings" className="p-xs text-secondary hover:bg-primary-container/10 rounded-full transition-colors flex items-center justify-center">
-              <span className="material-symbols-outlined">settings</span>
+              <span aria-hidden="true" className="material-symbols-outlined">settings</span>
             </Link>
             <button id="nav-logout" data-testid="nav-logout" onClick={handleLogout} className="px-md py-sm font-label-md text-label-md bg-error text-on-error rounded-lg hover:bg-error-container hover:text-on-error-container shadow-[0px_4px_12px_rgba(0,0,0,0.08)] transition-all active:scale-95 duration-200 inline-block text-center">
               Logout

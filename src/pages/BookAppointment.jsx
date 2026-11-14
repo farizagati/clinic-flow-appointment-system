@@ -175,7 +175,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-clinic" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Clinic *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.clinic} fieldId="appointment-clinic" />
                 </div>
@@ -204,7 +204,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-department" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Department *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.department} fieldId="appointment-department" />
                 </div>
@@ -286,7 +286,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-time" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Time Slot *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.time} fieldId="appointment-time" />
                 </div>
@@ -324,7 +324,7 @@ export default function BookAppointment() {
                   className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
                 >
                   Review Appointment
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
               </div>
 

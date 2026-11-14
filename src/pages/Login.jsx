@@ -147,7 +147,7 @@ export default function Login() {
           {/* Test Credentials Box */}
           <div className="bg-surface-container-low rounded-lg p-md border border-surface-variant">
             <div className="flex items-center gap-sm mb-sm text-on-surface-variant">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>info</span>
+              <span aria-hidden="true" className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>info</span>
               <h3 className="font-label-md text-label-md">Test Credentials</h3>
             </div>
             <div className="overflow-x-auto rounded border border-outline-variant">
