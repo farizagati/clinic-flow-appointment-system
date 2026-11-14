@@ -76,6 +76,7 @@ clinic-flow-appointment-system/
     ├── main.jsx                # Application root mounting and context nesting
     ├── App.jsx                 # Routing configuration and route guards
     ├── index.css               # Global styles, custom variables, and component classes
+    ├── assets/                 # Bundled images (hero illustration, default avatar)
     ├── contexts/
     │   ├── AuthContext.jsx     # Authentication state, storage, and booking operations
     │   └── ThemeContext.jsx    # Light/dark theme class and local storage persistence
