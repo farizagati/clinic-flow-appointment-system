@@ -49,7 +49,7 @@ trip, reload on the review page, long unbroken notes layout.
 - Actual: "Select Doctor" stays enabled with only the empty placeholder option. No explanation. The user can only submit and receive "Please select a doctor", which cannot be satisfied.
 - Also reproduces for: any clinic + the duplicate "Cardiology" department created in EF-012 (`dept-<timestamp>`), because the seeded doctor belongs to the original `cardiology` id.
 - Seed data gaps that trigger it: Northside clinic has no doctor at all; Dental and Orthopedics have no doctor until an admin adds one.
-- Resolution: When a clinic and department are selected and no doctor matches, a hint `appointment-doctor-empty` reads "No doctors available for this clinic and department." Select and validation unchanged (`src/pages/BookAppointment.jsx`).
+- Resolution: When a clinic and department are selected and no doctor matches, a hint `appointment-doctor-unavailable` reads "No doctors available for this clinic and department." Validation unchanged (`src/pages/BookAppointment.jsx`). Renamed from `appointment-doctor-empty`, which the doctor search dropdown uses for its no-results row. With the current seed data every clinic and department pair has doctors, so the hint only appears if that data changes.
 
 ## EF-026 - The same doctor, date and time slot can be booked repeatedly
 
