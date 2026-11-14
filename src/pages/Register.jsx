@@ -87,7 +87,7 @@ export default function Register() {
 
   return (
     <div id="register-page" data-testid="register-page" className="flex-grow flex flex-col w-full h-full">
-      <main className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
+      <div className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
         <div className="w-full max-w-[480px] bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] p-xl overflow-hidden relative z-10 border border-surface-variant mx-auto">
           <div className="text-center mb-xl">
             <h1 id="register-title" data-testid="register-title" className="font-headline-lg text-headline-lg mb-sm text-on-surface">
@@ -97,13 +97,13 @@ export default function Register() {
           </div>
 
           {error && (
-            <div id="register-error" data-testid="register-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+            <div id="register-error" data-testid="register-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
               {error}
             </div>
           )}
 
           {success && (
-            <div id="register-success" data-testid="register-success" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+            <div id="register-success" data-testid="register-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
               {success}
             </div>
           )}
@@ -235,7 +235,7 @@ export default function Register() {
             </div>
           </form>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

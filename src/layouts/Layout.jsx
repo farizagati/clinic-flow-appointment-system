@@ -1,8 +1,30 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navigation from './Navigation';
 
+const APP_TITLE = 'ClinicFlow Appointment System';
+const PAGE_TITLES = {
+  '/login': 'Login',
+  '/register': 'Register',
+  '/book-appointment': 'Book Appointment',
+  '/book-appointment/review': 'Review Appointment',
+  '/my-appointments': 'My Appointments',
+  '/admin-dashboard': 'Admin Dashboard',
+  '/settings': 'Settings',
+  '/privacy-policy': 'Privacy Policy',
+  '/terms-of-service': 'Terms of Service',
+  '/contact-support': 'Contact Support',
+  '/help-center': 'Help Center',
+};
+
 export default function Layout() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const pageTitle = PAGE_TITLES[pathname];
+    document.title = pageTitle ? `${pageTitle} | ClinicFlow` : APP_TITLE;
+  }, [pathname]);
+
   return (
     <div id="app-layout" data-testid="app-layout" className="flex flex-col min-h-screen">
       <header id="layout-header" data-testid="layout-header">

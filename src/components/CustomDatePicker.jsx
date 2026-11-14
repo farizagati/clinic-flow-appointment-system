@@ -184,6 +184,7 @@ export default function CustomDatePicker({
             {label}
           </label>
           <span
+            aria-hidden="true"
             onClick={() => setIsOpen(!isOpen)}
             data-testid={`${dataTestId}-toggle`}
             className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
@@ -203,6 +204,7 @@ export default function CustomDatePicker({
             className={`${inputClassName} cursor-pointer`}
           />
           <span
+            aria-hidden="true"
             onClick={() => setIsOpen(!isOpen)}
             data-testid={`${dataTestId}-toggle`}
             className="material-symbols-outlined absolute right-3 top-3.5 text-secondary cursor-pointer hover:text-primary transition-colors"

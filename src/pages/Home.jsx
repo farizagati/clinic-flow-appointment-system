@@ -25,7 +25,7 @@ export default function Home() {
         <div className="max-w-container-max mx-auto px-lg lg:px-xl grid md:grid-cols-2 gap-xl items-center relative z-10">
           <div className="space-y-lg">
             <div className="inline-flex items-center gap-sm bg-primary-container/10 text-primary px-sm py-xs rounded-full font-label-sm text-label-sm font-semibold">
-              <span className="material-symbols-outlined text-[16px]">verified</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-[16px]">verified</span>
               Trusted by 500+ Clinics
             </div>
             
@@ -48,7 +48,7 @@ export default function Home() {
                   ? (currentUser.role === 'admin' ? 'Go to Admin Dashboard' : 'Book Your First Appointment') 
                   : 'Book Your First Appointment'
                 }
-                <span className="material-symbols-outlined">arrow_forward</span>
+                <span aria-hidden="true" className="material-symbols-outlined">arrow_forward</span>
               </button>
               <button
                 data-testid="home-learn-more-btn"
@@ -73,7 +73,7 @@ export default function Home() {
       <section id="home-features" data-testid="home-features" className="py-xxl bg-background">
         <div className="max-w-container-max mx-auto px-lg lg:px-xl">
           <div className="text-center mb-xl space-y-sm">
-            <h2 className="font-headline-md text-headline-md text-on-surface">Application Features</h2>
+            <h2 data-testid="home-features-title" className="font-headline-md text-headline-md text-on-surface">Application Features</h2>
             <p className="font-body-md text-body-md text-on-surface-variant max-w-xl mx-auto">Three simple steps to secure your healthcare consultation. Designed for speed, reliability, and peace of mind.</p>
           </div>
           
@@ -82,9 +82,9 @@ export default function Home() {
             <li id="feature-offline" data-testid="feature-offline" className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
               <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                <span className="material-symbols-outlined text-[28px]">search</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">search</span>
               </div>
-              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">1. Find a Specialist</h3>
+              <h3 data-testid="feature-offline-title" className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">1. Find a Specialist</h3>
               <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">Search through our verified network of healthcare professionals by department, location, or availability.</p>
             </li>
             
@@ -92,9 +92,9 @@ export default function Home() {
             <li id="feature-roles" data-testid="feature-roles" className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
               <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                <span className="material-symbols-outlined text-[28px]">schedule</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">schedule</span>
               </div>
-              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">2. Choose a Time</h3>
+              <h3 data-testid="feature-roles-title" className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">2. Choose a Time</h3>
               <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">View real-time availability and select a time slot that fits seamlessly into your busy schedule.</p>
             </li>
             
@@ -102,9 +102,9 @@ export default function Home() {
             <li id="feature-booking" data-testid="feature-booking" className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
               <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                <span className="material-symbols-outlined text-[28px]">check_circle</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">check_circle</span>
               </div>
-              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">3. Secure Your Slot</h3>
+              <h3 data-testid="feature-booking-title" className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">3. Secure Your Slot</h3>
               <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">Confirm your details with a single click. Receive instant notifications and calendar invites.</p>
             </li>
           </ul>

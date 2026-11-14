@@ -76,7 +76,7 @@ export default function AdminDashboard() {
               <section id="admin-stats" data-testid="admin-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md mb-md">
                 {stats.map((stat) => (
                   <div key={stat.id} id={stat.id} data-testid={stat.id} className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-md flex flex-col">
-                    <h2 className="font-label-md text-label-md text-on-surface-variant mb-xs">{stat.label}</h2>
+                    <h2 data-testid={`${stat.id}-label`} className="font-label-md text-label-md text-on-surface-variant mb-xs">{stat.label}</h2>
                     <p data-testid={`${stat.id}-value`} className="font-headline-lg text-headline-lg text-on-surface">{stat.value}</p>
                   </div>
                 ))}
