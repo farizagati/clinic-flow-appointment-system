@@ -36,12 +36,26 @@ data-testid="login-submit"
 data-testid="admin-approve-{id}"
 ```
 
-### 2. No emojis in documentation
+### 2. Keep the accessibility tree clean
+
+Role and label locators must work as well as `data-testid` locators.
+
+- Icon spans (`material-symbols-outlined`) always carry `aria-hidden="true"`.
+- Icon-only controls need an `aria-label` (for example the settings link and the
+  theme toggle).
+- Clickable things are `<button>` or `<a>`, never a `<div>` with `onClick`.
+- Every form field has a `<label htmlFor>` or an `aria-label`.
+- One `<main>` per page. It lives in `src/layouts/Layout.jsx`; pages do not add another.
+- Error banners use `role="alert"`, success banners use `role="status"`.
+- Each route sets `document.title` through `PAGE_TITLES` in `src/layouts/Layout.jsx`.
+  Add an entry when adding a route.
+
+### 3. No emojis in documentation
 
 When writing or editing any documentation file (README, markdown reports, code comments,
 JSDoc, commit messages), **do not use emojis**. Keep the tone plain and professional.
 
-### 3. Preserve existing conventions
+### 4. Preserve existing conventions
 
 - Styling: Tailwind CSS utility classes. Custom design tokens are defined in
   `tailwind.config.js` and `src/index.css`.
@@ -49,13 +63,13 @@ JSDoc, commit messages), **do not use emojis**. Keep the tone plain and professi
 - State: React Context (`AuthContext`, `ThemeContext`) backed by localStorage.
 - Mock data lives in `src/data/mockData.js`.
 
-### 4. Do not introduce a backend
+### 5. Do not introduce a backend
 
 All data is intentionally stored in localStorage. Do not add a database, API server, or
 any network-dependent data layer. The app must remain fully client-side so it can be spun
 up with a single `npm run dev` for test automation purposes.
 
-### 5. Keep dependencies minimal
+### 6. Keep dependencies minimal
 
 Do not add new npm packages without explicit user approval. The current stack
 (React 19, react-router-dom 7, Vite 6, Tailwind 3) is intentionally lean.
@@ -216,12 +230,21 @@ await expect(page.getByTestId('appointment-doctor')).toHaveAttribute('data-selec
 | `confirm-dialog-confirm`, `confirm-dialog-cancel` | Confirmation buttons             |
 | `user-item-{id}`, `user-role-{id}`       | User row and role badge                   |
 
+### Appointment filters (My Appointments)
+
+- `filter-date-range-toggle` is a button named "Date range: {from} to {to}"
+  ("Start date" and "End date" when empty). It has `aria-expanded`.
+- The status checkboxes sit in a group named "Status" (`filter-status`).
+- The search input is labelled "Search appointments".
+
 ### Navigation
 
 - Below the `md` breakpoint the top links are hidden. `nav-menu-toggle` opens
   `nav-mobile-menu`, whose links are `nav-mobile-home`, `nav-mobile-book-appointment`,
   `nav-mobile-my-appointments` and `nav-mobile-admin-dashboard` (by role).
-- Theme toggle: `nav-theme-toggle`.
+- Theme toggle: `nav-theme-toggle`, labelled "Switch to light theme" or
+  "Switch to dark theme". Settings link: `nav-settings`, labelled "Settings".
+- Page titles follow "{Page} | ClinicFlow". Home keeps "ClinicFlow Appointment System".
 
 ---
 
