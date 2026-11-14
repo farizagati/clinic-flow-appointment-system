@@ -61,7 +61,7 @@ export default function Login() {
 
   return (
     <div id="login-page" data-testid="login-page" className="flex-grow flex flex-col w-full h-full">
-      <main className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
+      <div className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
         <div className="w-full max-w-lg mx-auto">
           <div className="text-center mb-xl">
             <h1 id="login-title" data-testid="login-title" className="font-headline-lg text-headline-lg text-primary md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile mb-sm">
@@ -72,7 +72,7 @@ export default function Login() {
           
           <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] p-xl mb-lg border border-surface-variant">
             {error && (
-              <div id="login-error" data-testid="login-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div id="login-error" data-testid="login-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
@@ -148,10 +148,10 @@ export default function Login() {
           <div className="bg-surface-container-low rounded-lg p-md border border-surface-variant">
             <div className="flex items-center gap-sm mb-sm text-on-surface-variant">
               <span aria-hidden="true" className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>info</span>
-              <h3 className="font-label-md text-label-md">Test Credentials</h3>
+              <h2 data-testid="login-credentials-title" className="font-label-md text-label-md">Test Credentials</h2>
             </div>
             <div className="overflow-x-auto rounded border border-outline-variant">
-              <table className="w-full text-left border-collapse font-body-sm text-body-sm">
+              <table data-testid="login-credentials-table" className="w-full text-left border-collapse font-body-sm text-body-sm">
                 <thead className="bg-surface-container-high text-on-surface-variant">
                   <tr>
                     <th className="px-md py-sm font-semibold border-b border-outline-variant whitespace-nowrap">Role</th>
@@ -176,7 +176,7 @@ export default function Login() {
           </div>
 
         </div>
-      </main>
+      </div>
     </div>
   );
 }

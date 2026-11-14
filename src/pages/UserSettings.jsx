@@ -216,7 +216,7 @@ export default function UserSettings() {
       {viewMode !== 'password' && (
         <div className="mb-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 data-testid="settings-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               {viewMode === 'edit' ? 'Edit Profile' : 'User Settings'}
             </h1>
             <p className="font-body-md text-body-md text-secondary">
@@ -250,13 +250,13 @@ export default function UserSettings() {
 
       {/* Global Alerts */}
       {error && (
-        <div id="settings-error" data-testid="settings-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+        <div id="settings-error" data-testid="settings-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
           {error}
         </div>
       )}
 
       {success && (
-        <div id="settings-success" data-testid="settings-success" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+        <div id="settings-success" data-testid="settings-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
           {success}
         </div>
       )}
@@ -276,13 +276,16 @@ export default function UserSettings() {
                   />
                 </div>
                 {viewMode === 'edit' && (
-                  <div
+                  <button
+                    type="button"
                     onClick={handleImageClick}
+                    data-testid="profile-pic-upload-btn"
+                    aria-label="Upload profile photo"
                     className="absolute inset-0 bg-black/45 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all hover:bg-black/60 z-20"
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-3xl">photo_camera</span>
                     <span className="font-label-sm text-xs mt-1">Upload</span>
-                  </div>
+                  </button>
                 )}
                 {viewMode === 'edit' && (
                   <input
@@ -295,7 +298,7 @@ export default function UserSettings() {
                   />
                 )}
               </div>
-              <h2 className="font-headline-sm text-headline-sm text-on-background mb-xs">
+              <h2 data-testid="settings-profile-name" className="font-headline-sm text-headline-sm text-on-background mb-xs">
                 {viewMode === 'edit' ? editName : (currentUser?.name || 'Alexia Sterling')}
               </h2>
               <p className="font-body-sm text-body-sm text-secondary mb-xl">Patient ID: #CF-8829</p>
@@ -332,7 +335,7 @@ export default function UserSettings() {
               <div className="flex flex-col gap-lg">
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
+                    <h3 data-testid="settings-personal-title" className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
@@ -358,7 +361,7 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
+                    <h3 data-testid="settings-clinical-title" className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
@@ -380,7 +383,7 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
+                    <h3 data-testid="settings-emergency-title" className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
                   </div>
                   <div className="p-lg">
                     <div className="flex flex-col gap-xs">
@@ -411,7 +414,7 @@ export default function UserSettings() {
                 {/* Danger Zone */}
                 <section aria-labelledby="danger-zone-heading" className="bg-surface rounded-xl shadow-sm border border-error/40 overflow-hidden mt-md w-full">
                   <div className="px-lg py-md border-b border-error/20 bg-error-container/20">
-                    <h3 id="danger-zone-heading" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
+                    <h3 id="danger-zone-heading" data-testid="settings-danger-zone-title" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
                       <span aria-hidden="true" className="material-symbols-outlined">warning</span>
                       Danger Zone
                     </h3>
@@ -442,7 +445,7 @@ export default function UserSettings() {
               >
                 {/* Personal Information Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 data-testid="edit-personal-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">person</span>
                     Personal Information
                   </h3>
@@ -500,7 +503,7 @@ export default function UserSettings() {
 
                 {/* Clinical Details & Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 data-testid="edit-clinical-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">medical_information</span>
                     Clinical & Contact Details
                   </h3>
@@ -543,7 +546,7 @@ export default function UserSettings() {
 
                 {/* Emergency Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 data-testid="edit-emergency-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">contact_emergency</span>
                     Emergency Contact
                   </h3>
@@ -597,7 +600,7 @@ export default function UserSettings() {
               <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_back</span>
               Back to Settings
             </button>
-            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 data-testid="change-password-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               Change Password
             </h1>
             <p className="font-body-md text-body-md text-secondary">

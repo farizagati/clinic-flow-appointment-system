@@ -123,7 +123,7 @@ export default function BookAppointment() {
 
   return (
     <div id="book-appointment-page" data-testid="book-appointment-page" className="flex-grow flex flex-col w-full h-full">
-      <main className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
+      <div className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
         <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] relative z-[10]">
           {/* Decorative Header Accent */}
           <div className="h-2 w-full bg-primary-container rounded-t-xl"></div>
@@ -137,13 +137,13 @@ export default function BookAppointment() {
             </div>
 
             {error && (
-              <div id="appointment-error" data-testid="appointment-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div id="appointment-error" data-testid="appointment-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
 
             {success && (
-              <div id="appointment-success" data-testid="appointment-success" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+              <div id="appointment-success" data-testid="appointment-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
                 {success}
               </div>
             )}
@@ -312,6 +312,7 @@ export default function BookAppointment() {
               <div className="pt-lg flex flex-col sm:flex-row justify-end gap-md">
                 <button
                   type="button"
+                  data-testid="appointment-cancel"
                   onClick={() => navigate('/my-appointments')}
                   className="font-label-md text-label-md px-6 py-3 rounded-lg text-on-surface hover:bg-surface-container transition-colors order-2 sm:order-1 active:scale-[0.98]"
                 >
@@ -331,7 +332,7 @@ export default function BookAppointment() {
             </form>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

@@ -193,6 +193,7 @@ export default function MyAppointments() {
             <input
               type="text"
               data-testid="search-input"
+              aria-label="Search appointments"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search appointments..."
@@ -223,7 +224,7 @@ export default function MyAppointments() {
           >
             {/* Date Range Column */}
             <div className="flex flex-col gap-xs">
-              <label className="font-label-md text-on-surface-variant font-medium">Date Range</label>
+              <span className="font-label-md text-on-surface-variant font-medium">Date Range</span>
               <CustomDateRangePicker
                 value={tempFilters.dateRange}
                 onChange={(range) => setTempFilters((prev) => ({ ...prev, dateRange: range }))}
@@ -264,8 +265,8 @@ export default function MyAppointments() {
 
             {/* Status Column */}
             <div className="flex flex-col gap-xs">
-              <label className="font-label-md text-on-surface-variant font-medium">Status</label>
-              <div className="flex flex-wrap gap-2 mt-1">
+              <span id="filter-status-label" className="font-label-md text-on-surface-variant font-medium">Status</span>
+              <div role="group" aria-labelledby="filter-status-label" data-testid="filter-status" className="flex flex-wrap gap-2 mt-1">
                 {['Confirmed', 'Scheduled', 'Pending', 'Cancelled'].map((statusName) => (
                   <label key={statusName} className="flex items-center gap-1 cursor-pointer">
                     <input
