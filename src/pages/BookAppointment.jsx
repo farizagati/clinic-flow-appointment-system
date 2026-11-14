@@ -123,7 +123,7 @@ export default function BookAppointment() {
 
   return (
     <div id="book-appointment-page" data-testid="book-appointment-page" className="flex-grow flex flex-col w-full h-full">
-      <main className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
+      <div className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
         <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] relative z-[10]">
           {/* Decorative Header Accent */}
           <div className="h-2 w-full bg-primary-container rounded-t-xl"></div>
@@ -137,13 +137,13 @@ export default function BookAppointment() {
             </div>
 
             {error && (
-              <div id="appointment-error" data-testid="appointment-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div id="appointment-error" data-testid="appointment-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
 
             {success && (
-              <div id="appointment-success" data-testid="appointment-success" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+              <div id="appointment-success" data-testid="appointment-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
                 {success}
               </div>
             )}
@@ -175,7 +175,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-clinic" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Clinic *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.clinic} fieldId="appointment-clinic" />
                 </div>
@@ -204,7 +204,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-department" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Department *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.department} fieldId="appointment-department" />
                 </div>
@@ -286,7 +286,7 @@ export default function BookAppointment() {
                     <label htmlFor="appointment-time" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
                       Select Time Slot *
                     </label>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={fieldErrors.time} fieldId="appointment-time" />
                 </div>
@@ -312,6 +312,7 @@ export default function BookAppointment() {
               <div className="pt-lg flex flex-col sm:flex-row justify-end gap-md">
                 <button
                   type="button"
+                  data-testid="appointment-cancel"
                   onClick={() => navigate('/my-appointments')}
                   className="font-label-md text-label-md px-6 py-3 rounded-lg text-on-surface hover:bg-surface-container transition-colors order-2 sm:order-1 active:scale-[0.98]"
                 >
@@ -324,14 +325,14 @@ export default function BookAppointment() {
                   className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
                 >
                   Review Appointment
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
               </div>
 
             </form>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

@@ -31,31 +31,47 @@ is asserted against in tests (headings, status labels, error messages, tables, l
 Naming convention -- use lowercase kebab-case scoped by page/component:
 
 ```
-data-testid="login-email-input"
-data-testid="login-submit-btn"
+data-testid="login-email"
+data-testid="login-submit"
 data-testid="admin-approve-{id}"
 ```
 
-### 2. No emojis in documentation
+### 2. Keep the accessibility tree clean
+
+Role and label locators must work as well as `data-testid` locators.
+
+- Icon spans (`material-symbols-outlined`) always carry `aria-hidden="true"`.
+- Icon-only controls need an `aria-label` (for example the settings link and the
+  theme toggle).
+- Clickable things are `<button>` or `<a>`, never a `<div>` with `onClick`.
+- Every form field has a `<label htmlFor>` or an `aria-label`.
+- One `<main>` per page. It lives in `src/layouts/Layout.jsx`; pages do not add another.
+- Error banners use `role="alert"`, success banners use `role="status"`.
+- Each route sets `document.title` through `PAGE_TITLES` in `src/layouts/Layout.jsx`.
+  Add an entry when adding a route.
+
+### 3. No emojis in documentation
 
 When writing or editing any documentation file (README, markdown reports, code comments,
 JSDoc, commit messages), **do not use emojis**. Keep the tone plain and professional.
 
-### 3. Preserve existing conventions
+### 4. Preserve existing conventions
 
 - Styling: Tailwind CSS utility classes. Custom design tokens are defined in
   `tailwind.config.js` and `src/index.css`.
 - Routing: HashRouter with route guards in `src/App.jsx`.
 - State: React Context (`AuthContext`, `ThemeContext`) backed by localStorage.
 - Mock data lives in `src/data/mockData.js`.
+- Images live in `src/assets/` and are imported into components. Do not link images
+  from external hosts.
 
-### 4. Do not introduce a backend
+### 5. Do not introduce a backend
 
 All data is intentionally stored in localStorage. Do not add a database, API server, or
 any network-dependent data layer. The app must remain fully client-side so it can be spun
 up with a single `npm run dev` for test automation purposes.
 
-### 5. Keep dependencies minimal
+### 6. Keep dependencies minimal
 
 Do not add new npm packages without explicit user approval. The current stack
 (React 19, react-router-dom 7, Vite 6, Tailwind 3) is intentionally lean.
@@ -83,6 +99,9 @@ src/
   App.jsx               -- Routes and role-based guards
   main.jsx              -- React root mount
   index.css             -- Global styles and custom CSS
+  assets/
+    hero-clinic.svg      -- Home hero illustration
+    avatar-default.svg   -- Default profile picture
   contexts/
     AuthContext.jsx      -- Auth state, user CRUD, booking ops
     ThemeContext.jsx      -- Light/dark theme toggle
@@ -92,21 +111,31 @@ src/
     FieldError.jsx       -- Inline field validation display
     CustomDatePicker.jsx -- Single date picker (booking date)
     CustomDateRangePicker.jsx -- Date range picker (appointment filters)
-    SearchDropdown.jsx   -- Debounced searchable dropdown (booking doctor field)
+    SearchDropdown.jsx   -- Debounced searchable dropdown (booking doctor field, home doctor search)
+    Modal.jsx            -- Dialog shell (role="dialog", closes on Escape)
+    ConfirmDialog.jsx    -- Confirm step for destructive actions
+    Pagination.jsx       -- Page controls (admin appointments)
+    admin/
+      AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination)
+      AdminDepartments.jsx  -- Department add, edit, delete
+      AdminDoctors.jsx      -- Doctor add, edit, delete, search
   layouts/
     Layout.jsx           -- Page shell (header, nav, footer)
-    Navigation.jsx       -- Top navbar
+    Navigation.jsx       -- Top navbar and mobile menu
   pages/
-    Home.jsx             -- Landing page
+    Home.jsx             -- Landing page (doctor search)
     Login.jsx            -- Login form
     Register.jsx         -- Registration form
     BookAppointment.jsx  -- Appointment booking (cascading dropdowns, doctor search)
     ReviewAppointment.jsx -- Booking review and confirm step
     MyAppointments.jsx   -- Patient appointment list (debounced search, filters, pagination)
-    AdminDashboard.jsx   -- Admin panel (stats, approve/cancel)
+    AdminDashboard.jsx   -- Admin panel shell (tabs, stats, users)
     UserSettings.jsx     -- Profile, password, purge data
     InfoPage.jsx         -- Footer info pages (privacy, terms, support, help)
-test-result/             -- Test output artifacts
+  services/
+    medicalRecords.js    -- Medical records PDF export
+  utils/
+    statusUtils.js       -- Appointment status badge class and icon helpers
 ```
 
 ---
@@ -119,8 +148,8 @@ test-result/             -- Test output artifacts
   who works at several clinics appears once per clinic with the same name and a
   different id (for example `dr-smith` at Downtown and `dr-smith-westside` at
   Westside). Always target doctors by id, not by name.
-- Booking the same doctor at the same time in two clinics is allowed. This is a known,
-  intentional gap; do not add a conflict check unless asked.
+- Each doctor record belongs to one clinic. Do not add schedule checks across clinics
+  unless asked.
 - Doctors are stored in localStorage (`clinicflow_doctors`). On every load the seed
   doctors are refreshed from `mockData.js` (so renamed or removed seed doctors update in
   existing browsers), and doctors created by the admin are kept.
@@ -160,6 +189,81 @@ await page.getByTestId('appointment-doctor').fill('smith');
 await page.getByTestId('appointment-doctor-option-dr-smith-westside').click();
 await expect(page.getByTestId('appointment-doctor')).toHaveAttribute('data-selected-value', 'dr-smith-westside');
 ```
+
+### Doctor search (Home)
+
+The "Find a Doctor" section on the home page uses the same component with
+`showSearching={false}`. Test ids use the `home-doctor-search` base
+(`home-doctor-search-option-{id}`, `-listbox`, `-empty`, `-clear`, `-toggle`).
+
+- Lists every doctor record. It is public, no login needed.
+- Results update 400ms after the last keystroke. There is no "Searching..." row and no
+  `aria-busy`; the previous list stays in place until the new results replace it.
+- Picking a doctor shows `home-doctor-result` (`-name`, `-department`, `-clinic`).
+- `home-doctor-book` reads "Log in to book" for guests and goes to `/login`. For a
+  member it reads "Book with this doctor" and opens Book Appointment with the clinic,
+  department and doctor filled in. Admins do not get the button.
+
+### Admin dashboard
+
+- Tabs are buttons: `admin-tab-stats`, `admin-tab-appointments`, `admin-tab-users`,
+  `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
+- Seed departments and doctors are built-in and read-only (their row shows
+  `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
+  edited or deleted.
+- Department names are unique (case-insensitive). A doctor is unique per name, clinic
+  and department. A department with doctors assigned cannot be deleted.
+- Result messages show in `admin-success` or `admin-error`. They clear on tab change.
+- Appointments: 10 rows per page. Search matches patient name, patient email, doctor,
+  clinic and department. Approve and Cancel apply immediately.
+- Add and edit forms are dialogs (`getByRole('dialog')` works). Escape closes them.
+  Field errors use `{input-testid}-error`.
+
+| data-testid                              | Element                                   |
+| ---------------------------------------- | ----------------------------------------- |
+| `stat-{name}-value`                      | Number inside a stat card                 |
+| `admin-appointments-search`              | Appointment search input                  |
+| `admin-appointments-status-filter`       | Status select (All, Pending, Approved, Cancelled) |
+| `admin-appointment-item-{id}`            | Appointment row                           |
+| `admin-apt-status-{id}`                  | Status badge                              |
+| `admin-approve-{id}`, `admin-cancel-{id}` | Row actions                              |
+| `admin-no-appointments`, `admin-no-matching-appointments` | Empty states             |
+| `admin-appointments-pagination`          | Pagination wrapper (hidden when no rows)  |
+| `admin-appointments-pagination-summary`  | "Showing 1 to 10 of 23 results"           |
+| `admin-appointments-page-{n}`, `-page-prev`, `-page-next` | Page buttons             |
+| `admin-add-dept-btn`, `admin-add-doc-btn` | Open the add dialog                      |
+| `add-dept-modal`, `edit-dept-modal`      | Department dialogs (`-close`, `-title`)   |
+| `new-dept-name-input`, `edit-dept-name-input` | Department name field                |
+| `add-dept-submit`, `add-dept-cancel`, `edit-dept-submit`, `edit-dept-cancel` | Department dialog buttons |
+| `dept-item-{id}`, `dept-name-{id}`, `dept-doctor-count-{id}` | Department row and cells |
+| `admin-edit-dept-{id}`, `admin-delete-dept-{id}` | Department row actions            |
+| `add-doc-modal`, `edit-doc-modal`        | Doctor dialogs (`-close`, `-title`)       |
+| `new-doc-name-input`, `new-doc-dept-select`, `new-doc-clinic-select` | Add doctor fields |
+| `edit-doc-name-input`, `edit-doc-dept-select`, `edit-doc-clinic-select` | Edit doctor fields |
+| `add-doc-submit`, `add-doc-cancel`, `edit-doc-submit`, `edit-doc-cancel` | Doctor dialog buttons |
+| `admin-doctors-search`                   | Doctor name search input                  |
+| `doc-item-{id}`, `doc-name-{id}`, `doc-dept-{id}`, `doc-clinic-{id}` | Doctor row and cells |
+| `admin-edit-doc-{id}`, `admin-delete-doc-{id}` | Doctor row actions                  |
+| `admin-no-matching-doctors`              | Doctor search empty state                 |
+| `confirm-dialog`, `confirm-dialog-message` | Delete confirmation                     |
+| `confirm-dialog-confirm`, `confirm-dialog-cancel` | Confirmation buttons             |
+| `user-item-{id}`, `user-role-{id}`       | User row and role badge                   |
+
+### Appointment filters (My Appointments)
+
+- `filter-date-range-toggle` is a button named "Date range: {from} to {to}"
+  ("Start date" and "End date" when empty). It has `aria-expanded`.
+- The status checkboxes sit in a group named "Status" (`filter-status`).
+- The search input is labelled "Search appointments".
+
+### Navigation
+
+- Below the `md` breakpoint the top links are hidden. `nav-menu-toggle` opens
+  `nav-mobile-menu`, whose links are `nav-mobile-home`, `nav-mobile-book-appointment`,
+  `nav-mobile-my-appointments` and `nav-mobile-admin-dashboard` (by role).
+- Theme toggle: `nav-theme-toggle`, labelled "Switch to light theme" or
+  "Switch to dark theme". Settings link: `nav-settings`, labelled "Settings".
+- Page titles follow "{Page} | ClinicFlow". Home keeps "ClinicFlow Appointment System".
 
 ---
 

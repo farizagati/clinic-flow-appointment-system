@@ -85,6 +85,7 @@ export default function CustomDateRangePicker({
   dataTestId = 'date-range-picker',
   placeholderStart = 'Start date',
   placeholderEnd = 'End date',
+  ariaLabel = 'Date range',
   containerClassName = '',
   captionLayout = 'dropdown',
   startMonth,
@@ -185,34 +186,41 @@ export default function CustomDateRangePicker({
     return `${format(draftRange.from, 'dd-MM-yyyy')} — ${format(draftRange.to, 'dd-MM-yyyy')}`;
   };
 
+  const fromText = value?.from ? format(value.from, 'dd-MM-yyyy') : placeholderStart;
+  const toText = value?.to ? format(value.to, 'dd-MM-yyyy') : placeholderEnd;
+
   const isRangeComplete = draftRange?.from && draftRange?.to;
   const hasAnyDraft = draftRange?.from || draftRange?.to;
 
   return (
     <div ref={containerRef} className={`relative ${containerClassName}`} data-testid={dataTestId}>
-      <div
-        onClick={handleToggle}
-        data-testid={`${dataTestId}-toggle`}
-        className="flex items-center justify-between border border-outline rounded-lg px-3 py-2 bg-surface hover:border-primary focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary transition-colors cursor-pointer w-full text-on-surface"
-      >
-        <div className="flex items-center min-w-0 flex-1">
-          <span className="material-symbols-outlined text-secondary mr-2 text-[20px] flex-shrink-0">calendar_today</span>
+      <div className="flex items-center justify-between border border-outline rounded-lg px-3 py-2 bg-surface hover:border-primary focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary transition-colors cursor-pointer w-full text-on-surface">
+        <button
+          type="button"
+          onClick={handleToggle}
+          data-testid={`${dataTestId}-toggle`}
+          aria-label={`${ariaLabel}: ${fromText} to ${toText}`}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          className="flex items-center min-w-0 flex-1 text-left focus:outline-none"
+        >
+          <span aria-hidden="true" className="material-symbols-outlined text-secondary mr-2 text-[20px] flex-shrink-0">calendar_today</span>
           <div className="flex items-center gap-1 font-body-sm min-w-0 flex-1">
             <span
               className={`truncate ${value?.from ? 'text-on-surface font-medium' : 'text-secondary'}`}
               data-testid={`${dataTestId}-from-display`}
             >
-              {value?.from ? format(value.from, 'dd-MM-yyyy') : placeholderStart}
+              {fromText}
             </span>
             <span className="text-secondary flex-shrink-0 mx-0.5">—</span>
             <span
               className={`truncate ${value?.to ? 'text-on-surface font-medium' : 'text-secondary'}`}
               data-testid={`${dataTestId}-to-display`}
             >
-              {value?.to ? format(value.to, 'dd-MM-yyyy') : placeholderEnd}
+              {toText}
             </span>
           </div>
-        </div>
+        </button>
         {(value?.from || value?.to) && (
           <button
             type="button"
@@ -224,7 +232,7 @@ export default function CustomDateRangePicker({
             className="ml-2 flex-shrink-0 text-secondary hover:text-error transition-colors"
             aria-label="Clear date range"
           >
-            <span className="material-symbols-outlined text-[18px]">close</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">close</span>
           </button>
         )}
       </div>
@@ -245,7 +253,7 @@ export default function CustomDateRangePicker({
                 : 'bg-surface-container-low text-on-surface-variant'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">
+            <span aria-hidden="true" className="material-symbols-outlined text-[16px]">
               {isRangeComplete ? 'check_circle' : draftRange?.from ? 'radio_button_checked' : 'radio_button_unchecked'}
             </span>
             <span>{getHintLabel()}</span>

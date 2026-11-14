@@ -60,7 +60,7 @@ export default function ReviewAppointment() {
 
   return (
     <div id="review-appointment-page" data-testid="review-appointment-page" className="flex-grow flex flex-col w-full h-full">
-      <main className="flex-grow flex flex-col items-center justify-center p-md md:p-xl w-full max-w-container-max mx-auto">
+      <div className="flex-grow flex flex-col items-center justify-center p-md md:p-xl w-full max-w-container-max mx-auto">
         <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] border border-outline-variant/30 overflow-hidden relative z-[10]">
           
           <div className="bg-surface-container-low px-lg py-xl border-b border-outline-variant/30 text-center">
@@ -70,13 +70,13 @@ export default function ReviewAppointment() {
 
           <div className="p-lg md:p-xl grid grid-cols-1 md:grid-cols-2 gap-xl">
             {error && (
-              <div id="appointment-error" data-testid="appointment-error" className="col-span-1 md:col-span-2 mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div id="appointment-error" data-testid="appointment-error" role="alert" className="col-span-1 md:col-span-2 mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
 
             {success && (
-              <div id="appointment-success" data-testid="appointment-success" className="col-span-1 md:col-span-2 mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+              <div id="appointment-success" data-testid="appointment-success" role="status" className="col-span-1 md:col-span-2 mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
                 {success}
               </div>
             )}
@@ -84,8 +84,8 @@ export default function ReviewAppointment() {
             {/* Patient Info */}
             <div className="space-y-md">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">person</span>
-                <h2 className="font-headline-sm text-headline-sm">Patient Information</h2>
+                <span aria-hidden="true" className="material-symbols-outlined">person</span>
+                <h2 data-testid="review-patient-title" className="font-headline-sm text-headline-sm">Patient Information</h2>
               </div>
               <div className="bg-surface rounded-lg p-md border border-outline-variant/20 shadow-sm space-y-sm">
                 <div>
@@ -103,8 +103,8 @@ export default function ReviewAppointment() {
             {/* Clinical Details */}
             <div className="space-y-md">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">stethoscope</span>
-                <h2 className="font-headline-sm text-headline-sm">Clinical Details</h2>
+                <span aria-hidden="true" className="material-symbols-outlined">stethoscope</span>
+                <h2 data-testid="review-clinical-title" className="font-headline-sm text-headline-sm">Clinical Details</h2>
               </div>
               <div className="bg-surface rounded-lg p-md border border-outline-variant/20 shadow-sm space-y-sm">
                 <div>
@@ -126,14 +126,14 @@ export default function ReviewAppointment() {
                   <div className="flex-1">
                     <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-1">Date</span>
                     <span className="font-body-md text-body-md text-on-surface flex items-center gap-1" id="review-date" data-testid="review-date">
-                      <span className="material-symbols-outlined text-sm text-secondary">calendar_today</span> 
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm text-secondary">calendar_today</span> 
                       {date}
                     </span>
                   </div>
                   <div className="flex-1">
                     <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-1">Time</span>
                     <span className="font-body-md text-body-md text-on-surface flex items-center gap-1" id="review-time" data-testid="review-time">
-                      <span className="material-symbols-outlined text-sm text-secondary">schedule</span> 
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm text-secondary">schedule</span> 
                       {time}
                     </span>
                   </div>
@@ -144,8 +144,8 @@ export default function ReviewAppointment() {
             {/* Status / Documents */}
             <div className="md:col-span-2 space-y-md pt-md border-t border-outline-variant/30">
               <div className="flex items-center gap-2 mb-sm text-primary">
-                <span className="material-symbols-outlined">assignment</span>
-                <h2 className="font-headline-sm text-headline-sm">Visit Context</h2>
+                <span aria-hidden="true" className="material-symbols-outlined">assignment</span>
+                <h2 data-testid="review-visit-title" className="font-headline-sm text-headline-sm">Visit Context</h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-md">
                 <div className="flex-1 bg-surface rounded-lg p-md border border-outline-variant/20 shadow-sm">
@@ -174,12 +174,12 @@ export default function ReviewAppointment() {
               data-testid="confirm-booking"
               className="w-full sm:w-auto px-8 py-3 rounded-lg font-label-md text-label-md text-on-primary bg-primary hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#00B14F]/40 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center gap-2 disabled:opacity-50" 
             >
-              <span className="material-symbols-outlined text-sm">check_circle</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-sm">check_circle</span>
               Confirm & Book Appointment
             </button>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

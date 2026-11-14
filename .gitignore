@@ -24,7 +24,6 @@ Icon
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 .Spotlight-V100
-.Trashes
 
 # Windows
 Thumbs.db
@@ -70,7 +69,4 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-# Temporary files
-temp_config.js
 

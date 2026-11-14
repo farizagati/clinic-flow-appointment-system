@@ -4,7 +4,9 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  * SearchDropdown - Debounced, searchable single-select dropdown (combobox).
  *
  * Typing filters the option list after `debounceMs` of inactivity. While the
- * debounce timer is pending, a "Searching..." row is shown. Typing after a
+ * debounce timer is pending, a "Searching..." row is shown. With
+ * `showSearching={false}` there is no such row: the previous results stay in
+ * place until the new ones replace them. Typing after a
  * value was picked clears the selection, so the field is only valid once an
  * option is actually chosen from the list.
  *
@@ -24,6 +26,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  *   value       {string}   Selected option id ('' for none).
  *   onChange    {Function} Called with the selected id, or '' when cleared.
  *   debounceMs  {number}   Debounce delay in milliseconds. Default 400.
+ *   showSearching {boolean} Show the "Searching..." row during the debounce. Default true.
  *   error       {boolean}  Shows error styling.
  *   emptyText   {string}   Text shown when the search matches nothing.
  *   noOptionsText {string} Text shown when there are no options at all, whatever
@@ -39,6 +42,7 @@ export default function SearchDropdown({
   value,
   onChange,
   debounceMs = 400,
+  showSearching = true,
   error = false,
   emptyText = 'No results found',
   noOptionsText,
@@ -89,6 +93,8 @@ export default function SearchDropdown({
     if (!q || (selected && debouncedQuery === selected.name)) return options;
     return options.filter((o) => o.name.toLowerCase().includes(q));
   }, [options, debouncedQuery, selected]);
+
+  const showLoader = showSearching && isSearching;
 
   const highlightTerm = selected && debouncedQuery === selected.name ? '' : debouncedQuery;
 
@@ -156,13 +162,13 @@ export default function SearchDropdown({
           openList();
           return;
         }
-        if (!isSearching && results.length) {
+        if (!showLoader && results.length) {
           setActiveIndex((i) => (i + 1) % results.length);
         }
         break;
       case 'ArrowUp':
         e.preventDefault();
-        if (isOpen && !isSearching && results.length) {
+        if (isOpen && !showLoader && results.length) {
           setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
         }
         break;
@@ -170,7 +176,7 @@ export default function SearchDropdown({
         if (isOpen) {
           // Never submit the form from inside the dropdown.
           e.preventDefault();
-          if (!isSearching && activeIndex >= 0 && results[activeIndex]) {
+          if (!showLoader && activeIndex >= 0 && results[activeIndex]) {
             selectOption(results[activeIndex]);
           }
         }
@@ -215,7 +221,7 @@ export default function SearchDropdown({
         aria-activedescendant={activeOptionId}
         aria-invalid={error}
         aria-describedby={describedBy}
-        aria-busy={isSearching}
+        aria-busy={showSearching ? isSearching : undefined}
         disabled={disabled}
         value={query}
         placeholder=" "
@@ -243,7 +249,7 @@ export default function SearchDropdown({
             onClick={handleClear}
             className="p-1 rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[20px]">close</span>
           </button>
         )}
         <button
@@ -262,7 +268,7 @@ export default function SearchDropdown({
           }}
           className="p-1 rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center"
         >
-          <span className={`material-symbols-outlined transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+          <span aria-hidden="true" className={`material-symbols-outlined transition-transform ${isOpen ? 'rotate-180' : ''}`}>
             expand_more
           </span>
         </button>
@@ -285,7 +291,7 @@ export default function SearchDropdown({
             >
               {noOptionsText || emptyText}
             </li>
-          ) : isSearching ? (
+          ) : showLoader ? (
             <li
               data-testid={`${dataTestId}-loading`}
               className="px-4 py-3 flex items-center gap-2 text-on-surface-variant font-body-sm"
@@ -334,7 +340,7 @@ export default function SearchDropdown({
                       </span>
                     )}
                   </div>
-                  {isSelected && <span className="material-symbols-outlined text-[18px]">check</span>}
+                  {isSelected && <span aria-hidden="true" className="material-symbols-outlined text-[18px]">check</span>}
                 </li>
               );
             })

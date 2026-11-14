@@ -1,14 +1,14 @@
 # ClinicFlow Appointment System
 
 > [!IMPORTANT]
-> **🤖 Practice Test Automation Sandbox**  
+> **Practice Test Automation Sandbox**  
 > This application is specifically designed and optimized as a sandbox for practicing modern web test automation (e.g., Playwright, Cypress, Selenium, Robot Framework). It features pre-configured test accounts, dynamic UI elements, form validation rules, local storage persistence, and comprehensive `data-testid` attributes.
 
 A modern, responsive healthcare appointment management application built with React, Vite, and Tailwind CSS. It serves as a realistic target for UI testing, end-to-end (E2E) automation, accessibility auditing, and state validation.
 
 ---
 
-## ⚡ TL;DR / Quick Start
+## Quick Start
 
 Get the application up and running locally in seconds:
 
@@ -23,25 +23,25 @@ npm install
 npm run dev
 ```
 
-Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system/` (or the URL printed in your terminal).
+Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system/#/` (or the URL printed in your terminal).
 
-### 🔑 Test Accounts
+### Test Accounts
 The application is pre-seeded with mock data. Use the following credentials to test different user roles:
 
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
 | **Patient (Member)** | `johnyjohnyyespapa@mail.com` | `EatingSugarNoPapa` | Book and manage personal appointments, edit settings |
-| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory |
+| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory, manage departments and doctors |
 
 ---
 
-## 🤖 Test Automation Sandbox Scenarios
+## Test Automation Sandbox Scenarios
 
 This application provides several complex front-end interaction patterns to write and run automation tests against:
 
 ### 1. Dynamic Dropdown Cascades
-In the [Booking Page](./src/pages/BookAppointment.jsx), the doctor dropdown options are dynamically filtered based on both the selected **Clinic** and **Department**.
-*   **Test Idea:** Assert that selecting a specific clinic and department correctly updates and filters the available doctors in the dropdown, and that changing them clears invalid selections.
+In the [Booking Page](./src/pages/BookAppointment.jsx), the doctor search field is filtered based on both the selected **Clinic** and **Department**.
+*   **Test Idea:** Assert that selecting a specific clinic and department correctly updates and filters the available doctors in the list, and that changing them clears invalid selections.
 
 ### 2. Date & Field Validation Assertions
 The booking form requires all fields to be filled and validates that the selected appointment date is not in the past relative to the client system date.
@@ -61,7 +61,7 @@ Supports theme switching between Light and Dark modes via the theme toggle butto
 
 ---
 
-## 📁 Codebase Architecture
+## Codebase Architecture
 
 Below is an overview of the key files and directories:
 
@@ -73,30 +73,46 @@ clinic-flow-appointment-system/
 ├── tailwind.config.js          # Custom Tailwind configuration (colors, spacing, typography)
 ├── postcss.config.js           # PostCSS setup
 └── src/
-    ├── main.jsx                # Application root mounting & Context nesting
-    ├── App.jsx                 # Routing configuration & route protection guards
-    ├── index.css               # Global stylesheets, custom variables, and components classes
+    ├── main.jsx                # Application root mounting and context nesting
+    ├── App.jsx                 # Routing configuration and route guards
+    ├── index.css               # Global styles, custom variables, and component classes
+    ├── assets/                 # Bundled images (hero illustration, default avatar)
     ├── contexts/
-    │   ├── AuthContext.jsx     # Handles authentication state, storage, and booking operations
-    │   └── ThemeContext.jsx    # Handles light/dark theme class and local storage persistence
+    │   ├── AuthContext.jsx     # Authentication state, storage, and booking operations
+    │   └── ThemeContext.jsx    # Light/dark theme class and local storage persistence
     ├── data/
-    │   └── mockData.js         # Pre-configured list of clinics, departments, doctors, and time slots
+    │   └── mockData.js         # Clinics, departments, doctors, and time slots
+    ├── components/
+    │   ├── FieldError.jsx      # Inline field validation message
+    │   ├── CustomDatePicker.jsx        # Single date picker
+    │   ├── CustomDateRangePicker.jsx   # Date range picker
+    │   ├── SearchDropdown.jsx  # Debounced searchable dropdown
+    │   ├── Modal.jsx           # Dialog shell
+    │   ├── ConfirmDialog.jsx   # Confirm step for destructive actions
+    │   ├── Pagination.jsx      # Page controls
+    │   └── admin/              # Admin dashboard sections (appointments, departments, doctors)
     ├── layouts/
-    │   ├── Layout.jsx          # General page framing (Header, Navigation, Main viewport, Footer)
-    │   └── Navigation.jsx      # Top navbar with responsive layout and action controls
-    └── pages/
-        ├── Home.jsx            # Application landing page & feature showcases
-        ├── Login.jsx           # Secure user authentication page
-        ├── Register.jsx        # Account registration page
-        ├── BookAppointment.jsx # Form-driven dynamic scheduling flow
-        ├── MyAppointments.jsx  # Patient dashboard to view and cancel appointments
-        ├── AdminDashboard.jsx  # Administrator control panel for global records
-        └── UserSettings.jsx    # Patient profile, emergency details, and system purge utility
+    │   ├── Layout.jsx          # Page shell (header, navigation, main, footer)
+    │   └── Navigation.jsx      # Top navbar
+    ├── pages/
+    │   ├── Home.jsx            # Landing page
+    │   ├── Login.jsx           # Login form
+    │   ├── Register.jsx        # Registration form
+    │   ├── BookAppointment.jsx # Appointment booking form
+    │   ├── ReviewAppointment.jsx # Booking review and confirm step
+    │   ├── MyAppointments.jsx  # Patient appointment list (search, filters, pagination)
+    │   ├── AdminDashboard.jsx  # Admin panel
+    │   ├── UserSettings.jsx    # Profile, password, medical records, purge data
+    │   └── InfoPage.jsx        # Footer info pages
+    ├── services/
+    │   └── medicalRecords.js   # Medical records PDF export
+    └── utils/
+        └── statusUtils.js      # Appointment status badge helpers
 ```
 
 ---
 
-## 🛠 Script Commands
+## Script Commands
 
 Run these scripts from the root directory:
 

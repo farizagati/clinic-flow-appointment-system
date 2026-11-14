@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import CustomDatePicker from '../components/CustomDatePicker';
 import { getMedicalRecordsPdf, saveBlob } from '../services/medicalRecords';
+import defaultAvatar from '../assets/avatar-default.svg';
 
 export default function UserSettings() {
   const { currentUser, users, appointments, updateUserSettings, purgeAndResetData } = useAuth();
@@ -207,7 +208,6 @@ export default function UserSettings() {
     reader.readAsDataURL(file);
   };
 
-  const defaultAvatar = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDFwcd3R-nhKhYIDu4Kj64jLGymQ7hW_s4ZNtiVTOGsD4q2C2lCi6XN6ZtIteQO_W0kDu3h3e53TZcGvIXwOlhcVcVFbJ6OaVVEQwo_P00kYchJwx67X6DykgzucgTtFlNMA3y-glNZqE3mHHZEGheSGDcQRU65LdaxErnJsnTgHgB9COb4DLYGFuuDl2u6ScQ2ZBFuisHcQCqOZqmj1r83JkKSIfp9GcpYqhY3jbVJ2HizU9tpXz-jq3mNbIo7U3qpi7W6LyutgJDd';
   const profilePicUrl = currentUser?.profilePic || defaultAvatar;
 
   return (
@@ -216,7 +216,7 @@ export default function UserSettings() {
       {viewMode !== 'password' && (
         <div className="mb-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 data-testid="settings-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               {viewMode === 'edit' ? 'Edit Profile' : 'User Settings'}
             </h1>
             <p className="font-body-md text-body-md text-secondary">
@@ -250,13 +250,13 @@ export default function UserSettings() {
 
       {/* Global Alerts */}
       {error && (
-        <div id="settings-error" data-testid="settings-error" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+        <div id="settings-error" data-testid="settings-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
           {error}
         </div>
       )}
 
       {success && (
-        <div id="settings-success" data-testid="settings-success" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+        <div id="settings-success" data-testid="settings-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
           {success}
         </div>
       )}
@@ -276,13 +276,16 @@ export default function UserSettings() {
                   />
                 </div>
                 {viewMode === 'edit' && (
-                  <div
+                  <button
+                    type="button"
                     onClick={handleImageClick}
+                    data-testid="profile-pic-upload-btn"
+                    aria-label="Upload profile photo"
                     className="absolute inset-0 bg-black/45 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all hover:bg-black/60 z-20"
                   >
-                    <span className="material-symbols-outlined text-3xl">photo_camera</span>
+                    <span aria-hidden="true" className="material-symbols-outlined text-3xl">photo_camera</span>
                     <span className="font-label-sm text-xs mt-1">Upload</span>
-                  </div>
+                  </button>
                 )}
                 {viewMode === 'edit' && (
                   <input
@@ -295,7 +298,7 @@ export default function UserSettings() {
                   />
                 )}
               </div>
-              <h2 className="font-headline-sm text-headline-sm text-on-background mb-xs">
+              <h2 data-testid="settings-profile-name" className="font-headline-sm text-headline-sm text-on-background mb-xs">
                 {viewMode === 'edit' ? editName : (currentUser?.name || 'Alexia Sterling')}
               </h2>
               <p className="font-body-sm text-body-sm text-secondary mb-xl">Patient ID: #CF-8829</p>
@@ -308,7 +311,7 @@ export default function UserSettings() {
                     onClick={startEditing}
                     className="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] focus-ring-subtle flex items-center justify-center gap-2"
                   >
-                    <span className="material-symbols-outlined text-sm">edit</span>
+                    <span aria-hidden="true" className="material-symbols-outlined text-sm">edit</span>
                     Edit Profile
                   </button>
                   <button
@@ -317,7 +320,7 @@ export default function UserSettings() {
                     onClick={startChangePassword}
                     className="w-full bg-surface text-on-surface border border-outline-variant font-label-md text-label-md py-3 rounded-lg hover:bg-surface-variant transition-colors focus-ring-subtle flex items-center justify-center gap-2"
                   >
-                    <span className="material-symbols-outlined text-sm">lock_reset</span>
+                    <span aria-hidden="true" className="material-symbols-outlined text-sm">lock_reset</span>
                     Change Password
                   </button>
                 </div>
@@ -332,7 +335,7 @@ export default function UserSettings() {
               <div className="flex flex-col gap-lg">
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
+                    <h3 data-testid="settings-personal-title" className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
@@ -358,20 +361,20 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
+                    <h3 data-testid="settings-clinical-title" className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Blood Type</span>
                       <div data-testid="settings-display-blood-type" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-tertiary-container text-sm">bloodtype</span>
+                        <span aria-hidden="true" className="material-symbols-outlined text-tertiary-container text-sm">bloodtype</span>
                         {currentUser?.bloodType || 'O Negative'}
                       </div>
                     </div>
                     <div className="flex flex-col gap-xs sm:col-span-2">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Primary Address</span>
                       <div data-testid="settings-display-address" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-start gap-2 whitespace-pre-line">
-                        <span className="material-symbols-outlined text-secondary text-sm mt-1">location_on</span>
+                        <span aria-hidden="true" className="material-symbols-outlined text-secondary text-sm mt-1">location_on</span>
                         <span>{currentUser?.address || '482 Clinical Heights Parkway, Suite 300\nSan Francisco, CA 94107'}</span>
                       </div>
                     </div>
@@ -380,7 +383,7 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
+                    <h3 data-testid="settings-emergency-title" className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
                   </div>
                   <div className="p-lg">
                     <div className="flex flex-col gap-xs">
@@ -403,7 +406,7 @@ export default function UserSettings() {
                       disabled={downloading}
                       className="bg-surface text-primary border border-primary font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-primary-container/10 transition-colors focus-ring-subtle flex items-center gap-2"
                     >
-                      <span className="material-symbols-outlined text-sm">download</span>{downloading ? 'Preparing...' : 'Download Medical Records'}
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm">download</span>{downloading ? 'Preparing...' : 'Download Medical Records'}
                     </button>
                   </div>
                 </section>
@@ -411,8 +414,8 @@ export default function UserSettings() {
                 {/* Danger Zone */}
                 <section aria-labelledby="danger-zone-heading" className="bg-surface rounded-xl shadow-sm border border-error/40 overflow-hidden mt-md w-full">
                   <div className="px-lg py-md border-b border-error/20 bg-error-container/20">
-                    <h3 id="danger-zone-heading" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
-                      <span className="material-symbols-outlined">warning</span>
+                    <h3 id="danger-zone-heading" data-testid="settings-danger-zone-title" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
+                      <span aria-hidden="true" className="material-symbols-outlined">warning</span>
                       Danger Zone
                     </h3>
                   </div>
@@ -427,7 +430,7 @@ export default function UserSettings() {
                       onClick={handlePurge}
                       className="shrink-0 bg-error text-on-error font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-error/90 transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:outline-none flex items-center gap-2"
                     >
-                      <span className="material-symbols-outlined text-sm">delete_forever</span>
+                      <span aria-hidden="true" className="material-symbols-outlined text-sm">delete_forever</span>
                       Purge Data
                     </button>
                   </div>
@@ -442,8 +445,8 @@ export default function UserSettings() {
               >
                 {/* Personal Information Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
-                    <span className="material-symbols-outlined text-primary">person</span>
+                  <h3 data-testid="edit-personal-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                    <span aria-hidden="true" className="material-symbols-outlined text-primary">person</span>
                     Personal Information
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-md pt-sm">
@@ -493,15 +496,15 @@ export default function UserSettings() {
                         <option value="Other">Other</option>
                         <option value="Prefer not to say">Prefer not to say</option>
                       </select>
-                      <span className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">arrow_drop_down</span>
+                      <span aria-hidden="true" className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">arrow_drop_down</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Clinical Details & Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
-                    <span className="material-symbols-outlined text-primary">medical_information</span>
+                  <h3 data-testid="edit-clinical-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                    <span aria-hidden="true" className="material-symbols-outlined text-primary">medical_information</span>
                     Clinical & Contact Details
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-md pt-sm">
@@ -524,7 +527,7 @@ export default function UserSettings() {
                         <option value="AB Negative">AB Negative</option>
                         <option value="AB Positive">AB Positive</option>
                       </select>
-                      <span className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">arrow_drop_down</span>
+                      <span aria-hidden="true" className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">arrow_drop_down</span>
                     </div>
                     {/* Primary Address */}
                     <div className="col-span-1 md:col-span-2 relative group mt-2">
@@ -543,8 +546,8 @@ export default function UserSettings() {
 
                 {/* Emergency Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
-                    <span className="material-symbols-outlined text-primary">contact_emergency</span>
+                  <h3 data-testid="edit-emergency-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                    <span aria-hidden="true" className="material-symbols-outlined text-primary">contact_emergency</span>
                     Emergency Contact
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-md pt-sm">
@@ -572,7 +575,7 @@ export default function UserSettings() {
                           value={editEmergencyPhone}
                           onChange={(e) => setEditEmergencyPhone(e.target.value)}
                         />
-                        <span className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">phone</span>
+                        <span aria-hidden="true" className="material-symbols-outlined absolute right-3 top-3.5 text-secondary pointer-events-none">phone</span>
                       </div>
                     </div>
                   </div>
@@ -594,10 +597,10 @@ export default function UserSettings() {
               onClick={cancelChangePassword}
               className="inline-flex items-center gap-xs text-secondary hover:text-primary transition-colors mb-sm font-label-md text-label-md"
             >
-              <span className="material-symbols-outlined text-sm">arrow_back</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_back</span>
               Back to Settings
             </button>
-            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 data-testid="change-password-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               Change Password
             </h1>
             <p className="font-body-md text-body-md text-secondary">
@@ -618,7 +621,7 @@ export default function UserSettings() {
                   Current Password
                 </label>
                 <div className="relative rounded border border-outline-variant bg-surface transition-all duration-200 focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-40 focus-within:border-primary">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">lock</span>
+                  <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">lock</span>
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="currentPassword"
@@ -640,7 +643,7 @@ export default function UserSettings() {
                   New Password
                 </label>
                 <div className="relative rounded border border-outline-variant bg-surface transition-all duration-200 focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-40 focus-within:border-primary">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">key</span>
+                  <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">key</span>
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="newPassword"
@@ -659,7 +662,7 @@ export default function UserSettings() {
                   Confirm New Password
                 </label>
                 <div className="relative rounded border border-outline-variant bg-surface transition-all duration-200 focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-40 focus-within:border-primary">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">password</span>
+                  <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">password</span>
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="confirmPassword"
