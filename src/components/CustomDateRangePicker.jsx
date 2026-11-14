@@ -204,7 +204,7 @@ export default function CustomDateRangePicker({
             >
               {value?.from ? format(value.from, 'dd-MM-yyyy') : placeholderStart}
             </span>
-            <span className="text-outline-variant flex-shrink-0 mx-0.5">—</span>
+            <span className="text-secondary flex-shrink-0 mx-0.5">—</span>
             <span
               className={`truncate ${value?.to ? 'text-on-surface font-medium' : 'text-secondary'}`}
               data-testid={`${dataTestId}-to-display`}

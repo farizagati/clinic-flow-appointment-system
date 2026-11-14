@@ -9,6 +9,7 @@ import ReviewAppointment from './pages/ReviewAppointment';
 import MyAppointments from './pages/MyAppointments';
 import AdminDashboard from './pages/AdminDashboard';
 import UserSettings from './pages/UserSettings';
+import InfoPage from './pages/InfoPage';
 import { useAuth } from './contexts/AuthContext';
 
 // Protected Route for any authenticated user
@@ -98,6 +99,12 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Public Info Pages */}
+          <Route path="privacy-policy" element={<InfoPage slug="privacy-policy" />} />
+          <Route path="terms-of-service" element={<InfoPage slug="terms-of-service" />} />
+          <Route path="contact-support" element={<InfoPage slug="contact-support" />} />
+          <Route path="help-center" element={<InfoPage slug="help-center" />} />
 
           {/* Catch-all Redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />

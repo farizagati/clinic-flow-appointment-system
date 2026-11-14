@@ -229,7 +229,13 @@ export default function BookAppointment() {
                     error={!!fieldErrors.doctor}
                     describedBy={fieldErrors.doctor ? 'appointment-doctor-error' : undefined}
                     emptyText="No doctors match your search"
+                    noOptionsText="No doctors available for this clinic and department."
                   />
+                  {clinic && department && filteredDoctors.length === 0 && (
+                    <p data-testid="appointment-doctor-unavailable" className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                      No doctors available for this clinic and department.
+                    </p>
+                  )}
                   <FieldError message={fieldErrors.doctor} fieldId="appointment-doctor" />
                 </div>
 
