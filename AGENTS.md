@@ -62,6 +62,8 @@ JSDoc, commit messages), **do not use emojis**. Keep the tone plain and professi
 - Routing: HashRouter with route guards in `src/App.jsx`.
 - State: React Context (`AuthContext`, `ThemeContext`) backed by localStorage.
 - Mock data lives in `src/data/mockData.js`.
+- Images live in `src/assets/` and are imported into components. Do not link images
+  from external hosts.
 
 ### 5. Do not introduce a backend
 
@@ -97,6 +99,9 @@ src/
   App.jsx               -- Routes and role-based guards
   main.jsx              -- React root mount
   index.css             -- Global styles and custom CSS
+  assets/
+    hero-clinic.svg      -- Home hero illustration
+    avatar-default.svg   -- Default profile picture
   contexts/
     AuthContext.jsx      -- Auth state, user CRUD, booking ops
     ThemeContext.jsx      -- Light/dark theme toggle

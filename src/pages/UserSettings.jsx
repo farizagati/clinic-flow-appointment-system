@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import CustomDatePicker from '../components/CustomDatePicker';
 import { getMedicalRecordsPdf, saveBlob } from '../services/medicalRecords';
+import defaultAvatar from '../assets/avatar-default.svg';
 
 export default function UserSettings() {
   const { currentUser, users, appointments, updateUserSettings, purgeAndResetData } = useAuth();
@@ -207,7 +208,6 @@ export default function UserSettings() {
     reader.readAsDataURL(file);
   };
 
-  const defaultAvatar = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDFwcd3R-nhKhYIDu4Kj64jLGymQ7hW_s4ZNtiVTOGsD4q2C2lCi6XN6ZtIteQO_W0kDu3h3e53TZcGvIXwOlhcVcVFbJ6OaVVEQwo_P00kYchJwx67X6DykgzucgTtFlNMA3y-glNZqE3mHHZEGheSGDcQRU65LdaxErnJsnTgHgB9COb4DLYGFuuDl2u6ScQ2ZBFuisHcQCqOZqmj1r83JkKSIfp9GcpYqhY3jbVJ2HizU9tpXz-jq3mNbIo7U3qpi7W6LyutgJDd';
   const profilePicUrl = currentUser?.profilePic || defaultAvatar;
 
   return (

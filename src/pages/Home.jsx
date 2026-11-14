@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SearchDropdown from '../components/SearchDropdown';
+import heroImage from '../assets/hero-clinic.svg';
 
 export default function Home() {
   const { currentUser, doctors, departments, clinics } = useAuth();
@@ -81,9 +82,9 @@ export default function Home() {
           
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-[0px_8px_24px_rgba(0,0,0,0.12)]">
             <img 
-              alt="A bright, modern medical clinic reception area" 
+              alt="Illustration of a clinic reception area" 
               className="absolute inset-0 w-full h-full object-cover" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-bXZntupP4q5jLc1-49j7PDSSt1Ep0T4F7ibjbzL8B3-HhkPLVia3mol5UZqVyyvkzNAtm1cqOEa7R3ROz6FyILIs0GsBCtwTxeFQPx450yErst39EsI-MvjuWAeQFgkhZJcS_qtgrz13whH2Dmiw5M-20pzuyDiU8qlR1vsUtllkO55zvTzAJ5-zGTXM8p0z9Zn_48KNkDw0bEP5yCsWtakwf8jShm0--Hnk_eIuUzC9YPpkWrkmqL6HWIqpbRdfN3-IVZlYZh16"
+              src={heroImage}
             />
           </div>
         </div>
