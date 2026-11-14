@@ -318,7 +318,16 @@ export const AuthProvider = ({ children }) => {
   const [doctors, setDoctors] = useState(() => {
     try {
       const stored = localStorage.getItem('clinicflow_doctors');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        // Append seed doctors added after this browser first stored data,
+        // keeping any doctors the admin created.
+        const parsed = JSON.parse(stored);
+        const missing = DOCTORS.filter((d) => !parsed.some((p) => p.id === d.id));
+        if (missing.length === 0) return parsed;
+        const merged = [...parsed, ...missing];
+        localStorage.setItem('clinicflow_doctors', JSON.stringify(merged));
+        return merged;
+      }
       localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
       return DOCTORS;
     } catch {
