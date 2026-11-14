@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -8,10 +8,21 @@ export default function Navigation() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  const links = [{ key: 'home', to: '/', label: 'Home' }];
+  if (currentUser?.role === 'member') {
+    links.push({ key: 'book-appointment', to: '/book-appointment', label: 'Book Appointment' });
+    links.push({ key: 'my-appointments', to: '/my-appointments', label: 'My Appointments' });
+  }
+  if (currentUser?.role === 'admin') {
+    links.push({ key: 'admin-dashboard', to: '/admin-dashboard', label: 'Admin Dashboard' });
+  }
 
   return (
     <nav id="app-navigation" data-testid="app-navigation" className="bg-surface dark:bg-inverse-surface shadow-sm dark:bg-surface-container-low sticky top-0 z-50 flex items-center justify-between px-lg py-sm w-full max-w-container-max mx-auto docked full-width">
@@ -22,31 +33,21 @@ export default function Navigation() {
       </div>
 
       <div className="hidden md:flex items-center gap-lg">
-        <Link to="/" id="nav-home" data-testid="nav-home" className="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md">
-          Home
-        </Link>
-
-        {currentUser && currentUser.role === 'member' && (
-          <>
-            <Link to="/book-appointment" id="nav-book-appointment" data-testid="nav-book-appointment" className="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md">
-              Book Appointment
-            </Link>
-            <Link to="/my-appointments" id="nav-my-appointments" data-testid="nav-my-appointments" className="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md">
-              My Appointments
-            </Link>
-          </>
-        )}
-
-        {currentUser && currentUser.role === 'admin' && (
-          <Link to="/admin-dashboard" id="nav-admin-dashboard" data-testid="nav-admin-dashboard" className="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md">
-            Admin Dashboard
+        {links.map((link) => (
+          <Link key={link.key} to={link.to} id={`nav-${link.key}`} data-testid={`nav-${link.key}`} className="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md">
+            {link.label}
           </Link>
-        )}
+        ))}
       </div>
 
       <div className="flex items-center gap-sm">
-        <button onClick={toggleTheme} className="p-sm text-secondary hover:bg-primary-container/10 rounded-full transition-colors flex items-center justify-center">
-          <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+        <button
+          onClick={toggleTheme}
+          data-testid="nav-theme-toggle"
+          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          className="p-sm text-secondary hover:bg-primary-container/10 rounded-full transition-colors flex items-center justify-center"
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
         </button>
 
         {!currentUser ? (
@@ -71,7 +72,34 @@ export default function Navigation() {
             </button>
           </div>
         )}
+
+        <button
+          onClick={() => setMenuOpen((open) => !open)}
+          data-testid="nav-menu-toggle"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          aria-controls="nav-mobile-menu"
+          className="md:hidden p-sm text-secondary hover:bg-primary-container/10 rounded-full transition-colors flex items-center justify-center"
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">{menuOpen ? 'close' : 'menu'}</span>
+        </button>
       </div>
+
+      {menuOpen && (
+        <div id="nav-mobile-menu" data-testid="nav-mobile-menu" className="md:hidden absolute top-full left-0 right-0 bg-surface dark:bg-surface-container-low border-t border-outline-variant shadow-md flex flex-col p-sm">
+          {links.map((link) => (
+            <Link
+              key={link.key}
+              to={link.to}
+              data-testid={`nav-mobile-${link.key}`}
+              onClick={() => setMenuOpen(false)}
+              className="px-md py-sm rounded-lg text-on-surface hover:bg-surface-variant transition-colors font-body-md text-body-md"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

@@ -31,7 +31,7 @@ The application is pre-seeded with mock data. Use the following credentials to t
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
 | **Patient (Member)** | `johnyjohnyyespapa@mail.com` | `EatingSugarNoPapa` | Book and manage personal appointments, edit settings |
-| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory |
+| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory, manage departments and doctors |
 
 ---
 
@@ -85,7 +85,11 @@ clinic-flow-appointment-system/
     │   ├── FieldError.jsx      # Inline field validation message
     │   ├── CustomDatePicker.jsx        # Single date picker
     │   ├── CustomDateRangePicker.jsx   # Date range picker
-    │   └── SearchDropdown.jsx  # Debounced searchable dropdown
+    │   ├── SearchDropdown.jsx  # Debounced searchable dropdown
+    │   ├── Modal.jsx           # Dialog shell
+    │   ├── ConfirmDialog.jsx   # Confirm step for destructive actions
+    │   ├── Pagination.jsx      # Page controls
+    │   └── admin/              # Admin dashboard sections (appointments, departments, doctors)
     ├── layouts/
     │   ├── Layout.jsx          # Page shell (header, navigation, main, footer)
     │   └── Navigation.jsx      # Top navbar

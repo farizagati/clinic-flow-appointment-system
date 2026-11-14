@@ -337,28 +337,87 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
-  const addDepartment = (name) => {
-    const newDept = {
-      id: `dept-${Date.now()}`,
-      name
-    };
-    const updated = [...departments, newDept];
+  const isSeedDepartment = (id) => DEPARTMENTS.some((d) => d.id === id);
+  const isSeedDoctor = (id) => !/^dr-\d+$/.test(id);
+
+  const saveDepartments = (updated) => {
     setDepartments(updated);
     localStorage.setItem('clinicflow_departments', JSON.stringify(updated));
+  };
+
+  const saveDoctors = (updated) => {
+    setDoctors(updated);
+    localStorage.setItem('clinicflow_doctors', JSON.stringify(updated));
+  };
+
+  const validateDepartmentName = (name, ignoreId) => {
+    const trimmed = (name || '').trim();
+    if (!trimmed) throw new Error('Department name is required');
+    const taken = departments.some(
+      (d) => d.id !== ignoreId && d.name.trim().toLowerCase() === trimmed.toLowerCase()
+    );
+    if (taken) throw new Error('Department already exists');
+    return trimmed;
+  };
+
+  const validateDoctor = (name, departmentId, clinicId, ignoreId) => {
+    const trimmed = (name || '').trim();
+    if (!trimmed) throw new Error('Doctor name is required');
+    if (!departments.some((d) => d.id === departmentId)) throw new Error('Please select a department');
+    if (!clinics.some((c) => c.id === clinicId)) throw new Error('Please select a clinic');
+    const taken = doctors.some(
+      (d) =>
+        d.id !== ignoreId &&
+        d.departmentId === departmentId &&
+        d.clinicId === clinicId &&
+        d.name.trim().toLowerCase() === trimmed.toLowerCase()
+    );
+    if (taken) throw new Error('This doctor already exists for the selected clinic and department');
+    return trimmed;
+  };
+
+  const addDepartment = (name) => {
+    const newDept = { id: `dept-${Date.now()}`, name: validateDepartmentName(name) };
+    saveDepartments([...departments, newDept]);
     return newDept;
+  };
+
+  const updateDepartment = (id, name) => {
+    if (isSeedDepartment(id)) throw new Error('Built-in departments cannot be changed');
+    const trimmed = validateDepartmentName(name, id);
+    saveDepartments(departments.map((d) => (d.id === id ? { ...d, name: trimmed } : d)));
+  };
+
+  const deleteDepartment = (id) => {
+    if (isSeedDepartment(id)) throw new Error('Built-in departments cannot be deleted');
+    if (doctors.some((d) => d.departmentId === id)) {
+      throw new Error('Department still has doctors assigned');
+    }
+    saveDepartments(departments.filter((d) => d.id !== id));
   };
 
   const addDoctor = (name, departmentId, clinicId) => {
     const newDoc = {
       id: `dr-${Date.now()}`,
-      name,
+      name: validateDoctor(name, departmentId, clinicId),
       departmentId,
-      clinicId
+      clinicId,
     };
-    const updated = [...doctors, newDoc];
-    setDoctors(updated);
-    localStorage.setItem('clinicflow_doctors', JSON.stringify(updated));
+    saveDoctors([...doctors, newDoc]);
     return newDoc;
+  };
+
+  const updateDoctor = (id, name, departmentId, clinicId) => {
+    if (isSeedDoctor(id)) throw new Error('Built-in doctors cannot be changed');
+    const trimmed = validateDoctor(name, departmentId, clinicId, id);
+    saveDoctors(
+      doctors.map((d) => (d.id === id ? { ...d, name: trimmed, departmentId, clinicId } : d))
+    );
+  };
+
+  const deleteDoctor = (id) => {
+    if (isSeedDoctor(id)) throw new Error('Built-in doctors cannot be deleted');
+    saveDoctors(doctors.filter((d) => d.id !== id));
   };
 
   const purgeAndResetData = () => {
@@ -428,7 +487,13 @@ export const AuthProvider = ({ children }) => {
       updateUserSettings,
       refreshUsersList,
       addDepartment,
+      updateDepartment,
+      deleteDepartment,
       addDoctor,
+      updateDoctor,
+      deleteDoctor,
+      isSeedDepartment,
+      isSeedDoctor,
       purgeAndResetData
     }}>
       {children}
