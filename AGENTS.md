@@ -106,7 +106,7 @@ src/
     FieldError.jsx       -- Inline field validation display
     CustomDatePicker.jsx -- Single date picker (booking date)
     CustomDateRangePicker.jsx -- Date range picker (appointment filters)
-    SearchDropdown.jsx   -- Debounced searchable dropdown (booking doctor field)
+    SearchDropdown.jsx   -- Debounced searchable dropdown (booking doctor field, home doctor search)
     Modal.jsx            -- Dialog shell (role="dialog", closes on Escape)
     ConfirmDialog.jsx    -- Confirm step for destructive actions
     Pagination.jsx       -- Page controls (admin appointments)
@@ -118,7 +118,7 @@ src/
     Layout.jsx           -- Page shell (header, nav, footer)
     Navigation.jsx       -- Top navbar and mobile menu
   pages/
-    Home.jsx             -- Landing page
+    Home.jsx             -- Landing page (doctor search)
     Login.jsx            -- Login form
     Register.jsx         -- Registration form
     BookAppointment.jsx  -- Appointment booking (cascading dropdowns, doctor search)
@@ -184,6 +184,20 @@ await page.getByTestId('appointment-doctor').fill('smith');
 await page.getByTestId('appointment-doctor-option-dr-smith-westside').click();
 await expect(page.getByTestId('appointment-doctor')).toHaveAttribute('data-selected-value', 'dr-smith-westside');
 ```
+
+### Doctor search (Home)
+
+The "Find a Doctor" section on the home page uses the same component with
+`showSearching={false}`. Test ids use the `home-doctor-search` base
+(`home-doctor-search-option-{id}`, `-listbox`, `-empty`, `-clear`, `-toggle`).
+
+- Lists every doctor record. It is public, no login needed.
+- Results update 400ms after the last keystroke. There is no "Searching..." row and no
+  `aria-busy`; the previous list stays in place until the new results replace it.
+- Picking a doctor shows `home-doctor-result` (`-name`, `-department`, `-clinic`).
+- `home-doctor-book` reads "Log in to book" for guests and goes to `/login`. For a
+  member it reads "Book with this doctor" and opens Book Appointment with the clinic,
+  department and doctor filled in. Admins do not get the button.
 
 ### Admin dashboard
 

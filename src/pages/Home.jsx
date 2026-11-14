@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import SearchDropdown from '../components/SearchDropdown';
 
 export default function Home() {
-  const { currentUser } = useAuth();
+  const { currentUser, doctors, departments, clinics } = useAuth();
   const navigate = useNavigate();
+  const [doctorId, setDoctorId] = useState('');
+
+  const departmentName = (id) => departments.find((d) => d.id === id)?.name || id;
+  const clinicName = (id) => clinics.find((c) => c.id === id)?.name || id;
+  const selectedDoctor = doctors.find((d) => d.id === doctorId);
+
+  const handleBookDoctor = () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+    navigate('/book-appointment', {
+      state: {
+        clinic: selectedDoctor.clinicId,
+        department: selectedDoctor.departmentId,
+        doctor: selectedDoctor.id,
+      },
+    });
+  };
 
   const handleCtaClick = () => {
     if (currentUser) {
@@ -66,6 +86,54 @@ export default function Home() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-bXZntupP4q5jLc1-49j7PDSSt1Ep0T4F7ibjbzL8B3-HhkPLVia3mol5UZqVyyvkzNAtm1cqOEa7R3ROz6FyILIs0GsBCtwTxeFQPx450yErst39EsI-MvjuWAeQFgkhZJcS_qtgrz13whH2Dmiw5M-20pzuyDiU8qlR1vsUtllkO55zvTzAJ5-zGTXM8p0z9Zn_48KNkDw0bEP5yCsWtakwf8jShm0--Hnk_eIuUzC9YPpkWrkmqL6HWIqpbRdfN3-IVZlYZh16"
             />
           </div>
+        </div>
+      </section>
+
+      {/* Doctor Search Section */}
+      <section id="home-doctor-search-section" data-testid="home-doctor-search-section" className="py-xl bg-surface-container-low">
+        <div className="max-w-2xl mx-auto px-lg">
+          <div className="text-center mb-lg space-y-sm">
+            <h2 data-testid="home-doctor-search-title" className="font-headline-md text-headline-md text-on-surface">Find a Doctor</h2>
+            <p className="font-body-md text-body-md text-on-surface-variant">Search our doctors by name to see where they practice.</p>
+          </div>
+
+          <SearchDropdown
+            id="home-doctor-search"
+            dataTestId="home-doctor-search"
+            label="Doctor Name"
+            options={doctors.map((d) => ({
+              id: d.id,
+              name: d.name,
+              meta: `${departmentName(d.departmentId)} - ${clinicName(d.clinicId)}`,
+            }))}
+            value={doctorId}
+            onChange={setDoctorId}
+            debounceMs={400}
+            showSearching={false}
+            emptyText="No doctors match your search."
+          />
+
+          {selectedDoctor && (
+            <div data-testid="home-doctor-result" className="mt-md bg-surface rounded-xl border border-outline-variant p-md flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+              <div>
+                <p data-testid="home-doctor-result-name" className="font-headline-sm text-headline-sm text-on-surface">{selectedDoctor.name}</p>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  <span data-testid="home-doctor-result-department">{departmentName(selectedDoctor.departmentId)}</span>
+                  {' at '}
+                  <span data-testid="home-doctor-result-clinic">{clinicName(selectedDoctor.clinicId)}</span>
+                </p>
+              </div>
+              {currentUser?.role !== 'admin' && (
+                <button
+                  data-testid="home-doctor-book"
+                  onClick={handleBookDoctor}
+                  className="px-md py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-surface-tint transition-colors whitespace-nowrap"
+                >
+                  {currentUser ? 'Book with this doctor' : 'Log in to book'}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
