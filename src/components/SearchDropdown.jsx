@@ -17,6 +17,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  *                            {base}-listbox       suggestion list
  *                            {base}-loading       debounce pending row
  *                            {base}-empty         no results row
+ *                            {base}-no-options    no options at all row
  *                            {base}-option-{id}   each option
  *   label       {string}   Floating label text.
  *   options     {Array}    [{ id, name, meta? }]. Only `name` is searched; `meta` is display-only secondary text.
@@ -24,7 +25,9 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  *   onChange    {Function} Called with the selected id, or '' when cleared.
  *   debounceMs  {number}   Debounce delay in milliseconds. Default 400.
  *   error       {boolean}  Shows error styling.
- *   emptyText   {string}   Text shown when nothing matches.
+ *   emptyText   {string}   Text shown when the search matches nothing.
+ *   noOptionsText {string} Text shown when there are no options at all, whatever
+ *                          was typed ({base}-no-options). Default: emptyText.
  *   disabled    {boolean}  Disables the field.
  *   describedBy {string}   aria-describedby for the input (e.g. the FieldError id).
  */
@@ -38,6 +41,7 @@ export default function SearchDropdown({
   debounceMs = 400,
   error = false,
   emptyText = 'No results found',
+  noOptionsText,
   disabled = false,
   describedBy,
 }) {
@@ -273,7 +277,15 @@ export default function SearchDropdown({
           aria-label={label}
           className="absolute left-0 right-0 top-full mt-1 z-50 max-h-64 overflow-y-auto bg-surface-container-lowest border border-outline-variant rounded-lg shadow-[0px_8px_24px_rgba(0,0,0,0.12)] py-1"
         >
-          {isSearching ? (
+          {options.length === 0 ? (
+            <li
+              data-testid={`${dataTestId}-no-options`}
+              className="px-4 py-3 text-on-surface-variant font-body-sm"
+              aria-live="polite"
+            >
+              {noOptionsText || emptyText}
+            </li>
+          ) : isSearching ? (
             <li
               data-testid={`${dataTestId}-loading`}
               className="px-4 py-3 flex items-center gap-2 text-on-surface-variant font-body-sm"
