@@ -121,8 +121,11 @@ test-result/             -- Test output artifacts
   Westside). Always target doctors by id, not by name.
 - Booking the same doctor at the same time in two clinics is allowed. This is a known,
   intentional gap; do not add a conflict check unless asked.
-- Doctors are seeded into localStorage (`clinicflow_doctors`) on first load. Seed
-  doctors added later are merged in on the next load, keeping admin-created doctors.
+- Doctors are stored in localStorage (`clinicflow_doctors`). On every load the seed
+  doctors are refreshed from `mockData.js` (so renamed or removed seed doctors update in
+  existing browsers), and doctors created by the admin are kept.
+- Doctor names are plain ASCII (no accents, apostrophes or hyphens), so they render
+  correctly in the medical records PDF, which uses the built-in Helvetica font.
 
 ### Doctor search dropdown (Book Appointment)
 
@@ -144,6 +147,7 @@ The doctor field is a combobox (`src/components/SearchDropdown.jsx`), not a nati
 | `appointment-doctor-option-{id}`    | One option, e.g. `...-option-dr-jones`   |
 | `appointment-doctor-loading`        | "Searching..." row during debounce       |
 | `appointment-doctor-empty`          | No results row                           |
+| `appointment-doctor-no-options`     | List row when the clinic and department pair has no doctors |
 | `appointment-doctor-clear`          | Clear button                             |
 | `appointment-doctor-toggle`         | Open/close arrow button                  |
 | `appointment-doctor-error`          | Validation message                       |
