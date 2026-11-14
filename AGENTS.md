@@ -31,8 +31,8 @@ is asserted against in tests (headings, status labels, error messages, tables, l
 Naming convention -- use lowercase kebab-case scoped by page/component:
 
 ```
-data-testid="login-email-input"
-data-testid="login-submit-btn"
+data-testid="login-email"
+data-testid="login-submit"
 data-testid="admin-approve-{id}"
 ```
 
@@ -106,7 +106,10 @@ src/
     AdminDashboard.jsx   -- Admin panel (stats, approve/cancel)
     UserSettings.jsx     -- Profile, password, purge data
     InfoPage.jsx         -- Footer info pages (privacy, terms, support, help)
-test-result/             -- Test output artifacts
+  services/
+    medicalRecords.js    -- Medical records PDF export
+  utils/
+    statusUtils.js       -- Appointment status badge class and icon helpers
 ```
 
 ---
@@ -119,8 +122,8 @@ test-result/             -- Test output artifacts
   who works at several clinics appears once per clinic with the same name and a
   different id (for example `dr-smith` at Downtown and `dr-smith-westside` at
   Westside). Always target doctors by id, not by name.
-- Booking the same doctor at the same time in two clinics is allowed. This is a known,
-  intentional gap; do not add a conflict check unless asked.
+- Each doctor record belongs to one clinic. Do not add schedule checks across clinics
+  unless asked.
 - Doctors are stored in localStorage (`clinicflow_doctors`). On every load the seed
   doctors are refreshed from `mockData.js` (so renamed or removed seed doctors update in
   existing browsers), and doctors created by the admin are kept.

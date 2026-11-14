@@ -13,8 +13,7 @@ export const DEPARTMENTS = [
 ];
 
 // One record per doctor per clinic. A doctor who works at several clinics
-// appears once for each clinic: same name, different id. Appointment
-// conflicts across clinics are intentionally not checked.
+// appears once for each clinic: same name, different id.
 export const DOCTORS = [
   // ClinicFlow Downtown (clinic-1)
   { id: 'dr-smith', name: 'Dr. Sarah Smith', departmentId: 'general', clinicId: 'clinic-1' },
