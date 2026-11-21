@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import AdminAppointments from '../components/admin/AdminAppointments';
 import AdminDepartments from '../components/admin/AdminDepartments';
 import AdminDoctors from '../components/admin/AdminDoctors';
+import AdminUsers from '../components/admin/AdminUsers';
 
 const TABS = [
   { id: 'stats', label: 'Dashboard Stats', icon: 'bar_chart' },
@@ -85,46 +86,7 @@ export default function AdminDashboard() {
 
             {activeTab === 'appointments' && <AdminAppointments />}
 
-            {activeTab === 'users' && (
-              <section id="users-section" data-testid="admin-users-section" className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
-                <div className="flex justify-between items-center mb-md border-b border-surface-variant pb-sm gap-md">
-                  <h2 data-testid="admin-users-title" className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
-                    <span className="material-symbols-outlined text-primary" aria-hidden="true">group</span>
-                    Registered Users
-                  </h2>
-                </div>
-
-                <div className="overflow-x-auto flex-grow mb-md">
-                  <table id="admin-users-table" data-testid="admin-users-table" className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="text-on-surface-variant font-label-sm text-label-sm border-b border-outline-variant uppercase tracking-wider bg-surface-container-low">
-                        <th className="py-sm px-md font-semibold whitespace-nowrap">Name</th>
-                        <th className="py-sm px-md font-semibold whitespace-nowrap">Email</th>
-                        <th className="py-sm px-md font-semibold whitespace-nowrap">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody id="admin-users-list" data-testid="admin-users-list" className="font-body-sm text-body-sm text-on-surface">
-                      {users.map((u) => (
-                        <tr
-                          key={u.id}
-                          id={`admin-user-row-${u.id}`}
-                          data-testid={`user-item-${u.id}`}
-                          className="border-b border-surface-variant hover:bg-surface-container-low transition-colors"
-                        >
-                          <td className="py-md px-md font-medium">{u.name}</td>
-                          <td className="py-md px-md">{u.email}</td>
-                          <td className="py-md px-md">
-                            <span data-testid={`user-role-${u.id}`} className="font-label-sm text-label-sm px-2 py-1 bg-surface-variant text-on-surface-variant rounded-full">
-                              {u.role}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            )}
+            {activeTab === 'users' && <AdminUsers onNotify={notify} />}
 
             {activeTab === 'departments' && <AdminDepartments onNotify={notify} />}
 
