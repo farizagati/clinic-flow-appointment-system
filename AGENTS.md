@@ -131,7 +131,7 @@ src/
     ConfirmDialog.jsx    -- Confirm step for destructive actions
     Pagination.jsx       -- Page controls (admin appointments)
     admin/
-      AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination)
+      AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination, details dialog)
       AdminDepartments.jsx  -- Department add, edit, delete
       AdminDoctors.jsx      -- Doctor add, edit, delete, search
   layouts/
@@ -231,6 +231,10 @@ The "Find a Doctor" section on the home page uses the same component with
 - Result messages show in `admin-success` or `admin-error`. They clear on tab change.
 - Appointments: 10 rows per page. Search matches patient name, patient email, doctor,
   clinic and department. Approve and Cancel apply immediately.
+- Every appointment row has a View button (`admin-view-{id}`, named "View details for
+  {patient name}"), also on Cancelled rows. It opens the `admin-apt-detail-modal` dialog
+  with all booking fields, including the patient notes. Approve and Cancel inside the
+  dialog apply immediately and the dialog stays open showing the new status.
 - Add and edit forms are dialogs (`getByRole('dialog')` works). Escape closes them.
   Field errors use `{input-testid}-error`.
 
@@ -242,6 +246,12 @@ The "Find a Doctor" section on the home page uses the same component with
 | `admin-appointment-item-{id}`            | Appointment row                           |
 | `admin-apt-status-{id}`                  | Status badge                              |
 | `admin-approve-{id}`, `admin-cancel-{id}` | Row actions                              |
+| `admin-view-{id}`                        | Opens the appointment details dialog      |
+| `admin-cancelled-label-{id}`             | Actions placeholder on Cancelled rows     |
+| `admin-apt-detail-modal`                 | Details dialog (`-title`, `-close`)       |
+| `admin-apt-detail-{field}`               | Value cells: `id`, `patient-name`, `patient-email`, `clinic`, `department`, `doctor`, `date`, `time`, `status`, `notes`, `created` |
+| `admin-apt-detail-approve`, `admin-apt-detail-cancel` | Dialog actions (Approve only when Pending, Cancel when not Cancelled) |
+| `admin-apt-detail-close-btn`             | Dialog Close button                       |
 | `admin-no-appointments`, `admin-no-matching-appointments` | Empty states             |
 | `admin-appointments-pagination`          | Pagination wrapper (hidden when no rows)  |
 | `admin-appointments-pagination-summary`  | "Showing 1 to 10 of 23 results"           |
