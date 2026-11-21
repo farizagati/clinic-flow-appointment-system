@@ -419,6 +419,7 @@ export const AuthProvider = ({ children }) => {
   // Writes start from the stored lists, so changes saved by another tab are kept.
   const latestDepartments = () => readStored('clinicflow_departments', departments);
   const latestDoctors = () => readStored('clinicflow_doctors', doctors);
+  const latestClinics = () => readStored('clinicflow_clinics', clinics);
 
   const saveDepartments = (updated) => {
     setDepartments(updated);
@@ -495,14 +496,14 @@ export const AuthProvider = ({ children }) => {
 
   const addClinic = (name) => {
     const newClinic = { id: `clinic-${Date.now()}`, name: validateClinicName(name) };
-    saveClinics([...clinics, newClinic]);
+    saveClinics([...latestClinics(), newClinic]);
     return newClinic;
   };
 
   const updateClinic = (id, name) => {
     if (isSeedClinic(id)) throw new Error('Built-in clinics cannot be changed');
     const trimmed = validateClinicName(name, id);
-    saveClinics(clinics.map((c) => (c.id === id ? { ...c, name: trimmed } : c)));
+    saveClinics(latestClinics().map((c) => (c.id === id ? { ...c, name: trimmed } : c)));
   };
 
   const deleteClinic = (id) => {
@@ -510,7 +511,7 @@ export const AuthProvider = ({ children }) => {
     if (doctors.some((d) => d.clinicId === id)) {
       throw new Error('Clinic still has doctors assigned');
     }
-    saveClinics(clinics.filter((c) => c.id !== id));
+    saveClinics(latestClinics().filter((c) => c.id !== id));
   };
 
   const addDoctor = (name, departmentId, clinicId) => {
