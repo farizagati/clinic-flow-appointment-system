@@ -76,6 +76,21 @@ up with a single `npm run dev` for test automation purposes.
 Do not add new npm packages without explicit user approval. The current stack
 (React 19, react-router-dom 7, Vite 6, Tailwind 3) is intentionally lean.
 
+### 7. Do not fix bugs without confirmation
+
+Some behavior in this app is deliberately imperfect, so testers have something to find.
+Work here focuses on unfinished flows (features that are partly built or missing), not
+on bug fixing.
+
+- Do not fix a bug, validation gap or odd behavior on your own, even when it looks
+  clearly wrong. List what you found and ask the user before changing anything.
+- Change behavior only after the user confirms that specific change.
+- Never describe a suspected or known bug in anything committed or published:
+  documentation, code comments, test ideas, commit messages, branch names, pull request
+  titles or descriptions, and issue text. Report findings to the user in chat only.
+- When a confirmed fix is committed, the message says what the code does now, not what
+  was wrong before.
+
 ---
 
 ## Quick Reference
@@ -253,7 +268,8 @@ The "Find a Doctor" section on the home page uses the same component with
 
 - `filter-date-range-toggle` is a button named "Date range: {from} to {to}"
   ("Start date" and "End date" when empty). It has `aria-expanded`.
-- The status checkboxes sit in a group named "Status" (`filter-status`).
+- The status checkboxes sit in a group named "Status" (`filter-status`):
+  `status-checkbox-pending`, `status-checkbox-approved`, `status-checkbox-cancelled`.
 - The search input is labelled "Search appointments".
 
 ### Navigation

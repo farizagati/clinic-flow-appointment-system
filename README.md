@@ -45,7 +45,7 @@ In the [Booking Page](./src/pages/BookAppointment.jsx), the doctor search field 
 
 ### 2. Date & Field Validation Assertions
 The booking form requires all fields to be filled and validates that the selected appointment date is not in the past relative to the client system date.
-*   **Test Idea:** Attempt to submit the booking form with a past date or missing fields, and assert that the warning alert (`data-testid="appointment-error"`) is visible and contains correct error messaging.
+*   **Test Idea:** Attempt to submit the booking form with a past date or missing fields, and assert that each inline field error (`data-testid="appointment-{field}-error"`, for example `appointment-date-error`) is visible and contains correct error messaging.
 
 ### 3. Role-Based Navigation & Page Guards
 Different pages are protected under different navigation guards defined in [App.jsx](./src/App.jsx).
