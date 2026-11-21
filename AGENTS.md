@@ -157,6 +157,17 @@ src/
 
 ## Testing Notes
 
+### Multiple tabs
+
+- All tabs of one browser share localStorage, so they share one session. Logging in or
+  out in one tab applies to the others too.
+- Other open tabs pick up changes (session, users, appointments, clinics, departments,
+  doctors) through the `storage` event, without a reload. The event fires only in the
+  other tabs, never in the tab that wrote.
+- Department and doctor changes are applied on top of the stored lists, so changes
+  saved from two admin tabs are all kept.
+- To test two users at once, use two browser contexts (separate storage).
+
 ### Mock doctors
 
 - `DOCTORS` in `src/data/mockData.js` holds one record per doctor per clinic. A doctor

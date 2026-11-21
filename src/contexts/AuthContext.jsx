@@ -3,6 +3,16 @@ import { CLINICS, DEPARTMENTS, DOCTORS } from '../data/mockData';
 
 const AuthContext = createContext(null);
 
+// Reads a stored list or value, falling back when it is missing or unreadable.
+const readStored = (key, fallback) => {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
@@ -340,6 +350,10 @@ export const AuthProvider = ({ children }) => {
   const isSeedDepartment = (id) => DEPARTMENTS.some((d) => d.id === id);
   const isSeedDoctor = (id) => !/^dr-\d+$/.test(id);
 
+  // Writes start from the stored lists, so changes saved by another tab are kept.
+  const latestDepartments = () => readStored('clinicflow_departments', departments);
+  const latestDoctors = () => readStored('clinicflow_doctors', doctors);
+
   const saveDepartments = (updated) => {
     setDepartments(updated);
     localStorage.setItem('clinicflow_departments', JSON.stringify(updated));
@@ -378,14 +392,14 @@ export const AuthProvider = ({ children }) => {
 
   const addDepartment = (name) => {
     const newDept = { id: `dept-${Date.now()}`, name: validateDepartmentName(name) };
-    saveDepartments([...departments, newDept]);
+    saveDepartments([...latestDepartments(), newDept]);
     return newDept;
   };
 
   const updateDepartment = (id, name) => {
     if (isSeedDepartment(id)) throw new Error('Built-in departments cannot be changed');
     const trimmed = validateDepartmentName(name, id);
-    saveDepartments(departments.map((d) => (d.id === id ? { ...d, name: trimmed } : d)));
+    saveDepartments(latestDepartments().map((d) => (d.id === id ? { ...d, name: trimmed } : d)));
   };
 
   const deleteDepartment = (id) => {
@@ -393,7 +407,7 @@ export const AuthProvider = ({ children }) => {
     if (doctors.some((d) => d.departmentId === id)) {
       throw new Error('Department still has doctors assigned');
     }
-    saveDepartments(departments.filter((d) => d.id !== id));
+    saveDepartments(latestDepartments().filter((d) => d.id !== id));
   };
 
   const addDoctor = (name, departmentId, clinicId) => {
@@ -403,7 +417,7 @@ export const AuthProvider = ({ children }) => {
       departmentId,
       clinicId,
     };
-    saveDoctors([...doctors, newDoc]);
+    saveDoctors([...latestDoctors(), newDoc]);
     return newDoc;
   };
 
@@ -411,14 +425,39 @@ export const AuthProvider = ({ children }) => {
     if (isSeedDoctor(id)) throw new Error('Built-in doctors cannot be changed');
     const trimmed = validateDoctor(name, departmentId, clinicId, id);
     saveDoctors(
-      doctors.map((d) => (d.id === id ? { ...d, name: trimmed, departmentId, clinicId } : d))
+      latestDoctors().map((d) => (d.id === id ? { ...d, name: trimmed, departmentId, clinicId } : d))
     );
   };
 
   const deleteDoctor = (id) => {
     if (isSeedDoctor(id)) throw new Error('Built-in doctors cannot be deleted');
-    saveDoctors(doctors.filter((d) => d.id !== id));
+    saveDoctors(latestDoctors().filter((d) => d.id !== id));
   };
+
+  // Keep this tab in sync when another tab of the same browser changes stored data
+  // or the session. The storage event only fires in the other tabs, not the writer.
+  useEffect(() => {
+    const syncedKeys = {
+      clinicflow_currentUser: [setCurrentUser, null],
+      clinicflow_users: [setUsers, []],
+      clinicflow_appointments: [setAppointments, []],
+      clinicflow_clinics: [setClinics, CLINICS],
+      clinicflow_departments: [setDepartments, DEPARTMENTS],
+      clinicflow_doctors: [setDoctors, DOCTORS],
+    };
+    const onStorage = (e) => {
+      if (e.storageArea !== localStorage) return;
+      // A null key means localStorage.clear() ran, so re-read every key.
+      const keys = e.key === null ? Object.keys(syncedKeys) : [e.key];
+      keys.forEach((key) => {
+        if (!syncedKeys[key]) return;
+        const [setter, fallback] = syncedKeys[key];
+        setter(readStored(key, fallback));
+      });
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const purgeAndResetData = () => {
     localStorage.removeItem('clinicflow_currentUser');
