@@ -171,6 +171,72 @@ export const AuthProvider = ({ children }) => {
     return newUser;
   };
 
+  // Admin user management. Reads the latest stored list, like register().
+  const readUsers = () => {
+    try {
+      const stored = localStorage.getItem('clinicflow_users');
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return users;
+  };
+
+  const saveUsers = (updated) => {
+    localStorage.setItem('clinicflow_users', JSON.stringify(updated));
+    setUsers(updated);
+  };
+
+  const emailTaken = (list, email, ignoreId) =>
+    list.some((u) => u.id !== ignoreId && u.email.toLowerCase() === email.trim().toLowerCase());
+
+  const addUser = ({ name, email, password, role = 'member' }) => {
+    const latestUsers = readUsers();
+    if (emailTaken(latestUsers, email)) throw new Error('Email is already registered');
+    const newUser = {
+      id: `user-${Date.now()}`,
+      email: email.trim().toLowerCase(),
+      name: name.trim(),
+      password,
+      role,
+      gender: 'Female',
+      dob: '12 October 1985',
+      bloodType: 'O Negative',
+      address: '482 Clinical Heights Parkway, Suite 300, San Francisco, CA 94107',
+      emergencyName: 'Robert Sterling (Spouse)',
+      emergencyPhone: '+1 (555) 987-6543',
+      profilePic: null,
+    };
+    saveUsers([...latestUsers, newUser]);
+    return newUser;
+  };
+
+  const updateUser = (id, { name, email, role, password }) => {
+    const latestUsers = readUsers();
+    if (emailTaken(latestUsers, email, id)) throw new Error('Email is already registered');
+    const isSelf = currentUser?.id === id;
+    const updatedUsers = latestUsers.map((u) =>
+      u.id === id
+        ? {
+            ...u,
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            role: isSelf ? u.role : role,
+            password: password || u.password,
+          }
+        : u
+    );
+    saveUsers(updatedUsers);
+    if (isSelf) {
+      const session = { ...currentUser, name: name.trim(), email: email.trim().toLowerCase() };
+      localStorage.setItem('clinicflow_currentUser', JSON.stringify(session));
+      setCurrentUser(session);
+    }
+  };
+
+  const deleteUser = (id) => {
+    if (currentUser?.id === id) throw new Error('You cannot delete your own account');
+    saveUsers(readUsers().filter((u) => u.id !== id));
+  };
+
   const logout = () => {
     localStorage.removeItem('clinicflow_currentUser');
     setCurrentUser(null);
@@ -517,6 +583,9 @@ export const AuthProvider = ({ children }) => {
       doctors,
       login,
       register,
+      addUser,
+      updateUser,
+      deleteUser,
       logout,
       bookAppointment,
       cancelAppointment,
