@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import AdminAppointments from '../components/admin/AdminAppointments';
+import AdminClinics from '../components/admin/AdminClinics';
 import AdminDepartments from '../components/admin/AdminDepartments';
 import AdminDoctors from '../components/admin/AdminDoctors';
 
@@ -8,6 +9,7 @@ const TABS = [
   { id: 'stats', label: 'Dashboard Stats', icon: 'bar_chart' },
   { id: 'appointments', label: 'Appointments', icon: 'calendar_today' },
   { id: 'users', label: 'Users Database', icon: 'group' },
+  { id: 'clinics', label: 'Clinics', icon: 'local_hospital' },
   { id: 'departments', label: 'Departments', icon: 'domain' },
   { id: 'doctors', label: 'Doctors', icon: 'medical_services' },
 ];
@@ -125,6 +127,8 @@ export default function AdminDashboard() {
                 </div>
               </section>
             )}
+
+            {activeTab === 'clinics' && <AdminClinics onNotify={notify} />}
 
             {activeTab === 'departments' && <AdminDepartments onNotify={notify} />}
 
