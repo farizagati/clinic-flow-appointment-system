@@ -134,6 +134,7 @@ src/
       AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination)
       AdminDepartments.jsx  -- Department add, edit, delete
       AdminDoctors.jsx      -- Doctor add, edit, delete, search
+      AdminUsers.jsx        -- User add, edit, delete, search
   layouts/
     Layout.jsx           -- Page shell (header, nav, footer)
     Navigation.jsx       -- Top navbar and mobile menu
@@ -144,7 +145,7 @@ src/
     BookAppointment.jsx  -- Appointment booking (cascading dropdowns, doctor search)
     ReviewAppointment.jsx -- Booking review and confirm step
     MyAppointments.jsx   -- Patient appointment list (debounced search, filters, pagination)
-    AdminDashboard.jsx   -- Admin panel shell (tabs, stats, users)
+    AdminDashboard.jsx   -- Admin panel shell (tabs, stats)
     UserSettings.jsx     -- Profile, password, purge data
     InfoPage.jsx         -- Footer info pages (privacy, terms, support, help)
   services/
@@ -233,6 +234,12 @@ The "Find a Doctor" section on the home page uses the same component with
   clinic and department. Approve and Cancel apply immediately.
 - Add and edit forms are dialogs (`getByRole('dialog')` works). Escape closes them.
   Field errors use `{input-testid}-error`.
+- Users: search matches name and email (case-insensitive substring). Add and edit use
+  the Register rules: name required, valid email, email unique (case-insensitive),
+  password at least 8 characters. On edit a blank password keeps the current one. The
+  logged-in admin's row shows `user-self-{id}` ("You") and has no delete button, and
+  the role select is disabled when they edit themselves. Deleting a user keeps their
+  appointments.
 
 | data-testid                              | Element                                   |
 | ---------------------------------------- | ----------------------------------------- |
@@ -262,7 +269,17 @@ The "Find a Doctor" section on the home page uses the same component with
 | `admin-no-matching-doctors`              | Doctor search empty state                 |
 | `confirm-dialog`, `confirm-dialog-message` | Delete confirmation                     |
 | `confirm-dialog-confirm`, `confirm-dialog-cancel` | Confirmation buttons             |
-| `user-item-{id}`, `user-role-{id}`       | User row and role badge                   |
+| `user-item-{id}`, `user-name-{id}`, `user-email-{id}`, `user-role-{id}` | User row, cells and role badge |
+| `user-self-{id}`                         | "You" label on the logged-in admin's row  |
+| `admin-users-search`                     | User name and email search input          |
+| `admin-no-matching-users`                | User search empty state                   |
+| `admin-add-user-btn`                     | Open the add user dialog                  |
+| `add-user-modal`, `edit-user-modal`      | User dialogs (`-close`, `-title`)         |
+| `new-user-name-input`, `new-user-email-input`, `new-user-password-input`, `new-user-role-select` | Add user fields |
+| `edit-user-name-input`, `edit-user-email-input`, `edit-user-password-input`, `edit-user-role-select` | Edit user fields |
+| `edit-user-role-select-hint`             | Shown when the admin edits their own row  |
+| `add-user-submit`, `add-user-cancel`, `edit-user-submit`, `edit-user-cancel` | User dialog buttons |
+| `admin-edit-user-{id}`, `admin-delete-user-{id}` | User row actions                  |
 
 ### Appointment filters (My Appointments)
 

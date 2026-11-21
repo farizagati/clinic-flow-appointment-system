@@ -31,7 +31,7 @@ The application is pre-seeded with mock data. Use the following credentials to t
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
 | **Patient (Member)** | `johnyjohnyyespapa@mail.com` | `EatingSugarNoPapa` | Book and manage personal appointments, edit settings |
-| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory, manage departments and doctors |
+| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, manage users, departments and doctors |
 
 ---
 
