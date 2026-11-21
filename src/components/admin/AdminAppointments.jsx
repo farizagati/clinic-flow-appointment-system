@@ -1,17 +1,105 @@
 import React, { useState } from 'react';
+import { format, isValid, parseISO } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
 import { getStatusClass } from '../../utils/statusUtils';
 import Pagination from '../Pagination';
+import Modal from '../Modal';
 
 const PAGE_SIZE = 10;
 const STATUSES = ['Pending', 'Approved', 'Cancelled'];
 const CONTROL_CLASS = 'px-4 py-2 border border-outline rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40 bg-surface font-body-sm text-body-sm text-on-surface';
+const DETAIL_PREFIX = 'admin-apt-detail';
+
+const formatCreated = (value) => {
+  if (!value) return '-';
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'd MMM yyyy, HH:mm') : '-';
+};
+
+function AppointmentDetails({ appointmentId, onClose }) {
+  const { appointments, updateAppointmentStatus } = useAuth();
+  // Read from context by id so the dialog reflects status changes made here.
+  const apt = appointments.find((a) => a.id === appointmentId);
+  if (!apt) return null;
+
+  const fields = [
+    ['id', 'Booking ID', apt.id],
+    ['patient-name', 'Patient', apt.userName],
+    ['patient-email', 'Email', apt.userEmail],
+    ['clinic', 'Clinic', apt.clinic],
+    ['department', 'Department', apt.department],
+    ['doctor', 'Doctor', apt.doctor],
+    ['date', 'Date', apt.date],
+    ['time', 'Time', apt.time],
+  ];
+
+  return (
+    <Modal title="Appointment Details" testId={`${DETAIL_PREFIX}-modal`} onClose={onClose}>
+      <div className="p-lg flex flex-col gap-md">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-md gap-y-sm font-body-sm text-body-sm">
+          {fields.map(([key, label, value]) => (
+            <React.Fragment key={key}>
+              <dt className="text-secondary font-label-sm text-label-sm uppercase tracking-wider">{label}</dt>
+              <dd data-testid={`${DETAIL_PREFIX}-${key}`} className="text-on-surface break-words">{value || '-'}</dd>
+            </React.Fragment>
+          ))}
+          <dt className="text-secondary font-label-sm text-label-sm uppercase tracking-wider">Status</dt>
+          <dd>
+            <span
+              data-testid={`${DETAIL_PREFIX}-status`}
+              className={`font-label-sm text-label-sm px-2 py-1 rounded-full ${getStatusClass(apt.status)}`}
+            >
+              {apt.status}
+            </span>
+          </dd>
+          <dt className="text-secondary font-label-sm text-label-sm uppercase tracking-wider">Notes</dt>
+          <dd data-testid={`${DETAIL_PREFIX}-notes`} className="text-on-surface whitespace-pre-line break-words">
+            {apt.notes || 'None provided'}
+          </dd>
+          <dt className="text-secondary font-label-sm text-label-sm uppercase tracking-wider">Booked On</dt>
+          <dd data-testid={`${DETAIL_PREFIX}-created`} className="text-on-surface">{formatCreated(apt.createdAt)}</dd>
+        </dl>
+        <div className="flex justify-end gap-sm mt-sm">
+          {apt.status === 'Pending' && (
+            <button
+              type="button"
+              data-testid={`${DETAIL_PREFIX}-approve`}
+              onClick={() => updateAppointmentStatus(apt.id, 'Approved')}
+              className="text-primary hover:bg-primary-container/20 px-4 py-2 rounded-lg transition-colors font-label-md text-label-md border border-primary"
+            >
+              Approve
+            </button>
+          )}
+          {apt.status !== 'Cancelled' && (
+            <button
+              type="button"
+              data-testid={`${DETAIL_PREFIX}-cancel`}
+              onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}
+              className="text-error hover:bg-error-container/50 px-4 py-2 rounded-lg transition-colors font-label-md text-label-md border border-error"
+            >
+              Cancel Appointment
+            </button>
+          )}
+          <button
+            type="button"
+            data-testid={`${DETAIL_PREFIX}-close-btn`}
+            onClick={onClose}
+            className="px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded-lg transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
 
 export default function AdminAppointments() {
   const { appointments, updateAppointmentStatus } = useAuth();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
+  const [detailId, setDetailId] = useState(null);
 
   const query = search.trim().toLowerCase();
   const filtered = appointments.filter((apt) => {
@@ -115,32 +203,43 @@ export default function AdminAppointments() {
                     </span>
                   </td>
                   <td className="py-md px-md text-right whitespace-nowrap">
-                    {apt.status === 'Cancelled' ? (
-                      <span id={`admin-cancelled-label-${apt.id}`} data-testid={`admin-cancelled-label-${apt.id}`} className="text-secondary font-label-sm text-label-sm">
-                        --
-                      </span>
-                    ) : (
-                      <div className="flex gap-2 justify-end">
-                        {apt.status === 'Pending' && (
+                    <div className="flex gap-2 justify-end items-center">
+                      <button
+                        type="button"
+                        data-testid={`admin-view-${apt.id}`}
+                        aria-label={`View details for ${apt.userName}`}
+                        onClick={() => setDetailId(apt.id)}
+                        className="text-on-surface hover:bg-surface-variant px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-outline"
+                      >
+                        View
+                      </button>
+                      {apt.status === 'Cancelled' ? (
+                        <span id={`admin-cancelled-label-${apt.id}`} data-testid={`admin-cancelled-label-${apt.id}`} className="text-secondary font-label-sm text-label-sm">
+                          --
+                        </span>
+                      ) : (
+                        <div className="flex gap-2 justify-end">
+                          {apt.status === 'Pending' && (
+                            <button
+                              id={`admin-approve-${apt.id}`}
+                              data-testid={`admin-approve-${apt.id}`}
+                              onClick={() => updateAppointmentStatus(apt.id, 'Approved')}
+                              className="text-primary hover:bg-primary-container/20 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-primary"
+                            >
+                              Approve
+                            </button>
+                          )}
                           <button
-                            id={`admin-approve-${apt.id}`}
-                            data-testid={`admin-approve-${apt.id}`}
-                            onClick={() => updateAppointmentStatus(apt.id, 'Approved')}
-                            className="text-primary hover:bg-primary-container/20 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-primary"
+                            id={`admin-cancel-${apt.id}`}
+                            data-testid={`admin-cancel-${apt.id}`}
+                            onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}
+                            className="text-error hover:bg-error-container/50 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-error"
                           >
-                            Approve
+                            Cancel
                           </button>
-                        )}
-                        <button
-                          id={`admin-cancel-${apt.id}`}
-                          data-testid={`admin-cancel-${apt.id}`}
-                          onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}
-                          className="text-error hover:bg-error-container/50 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-error"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -148,6 +247,8 @@ export default function AdminAppointments() {
           </table>
         )}
       </div>
+
+      {detailId && <AppointmentDetails appointmentId={detailId} onClose={() => setDetailId(null)} />}
 
       <Pagination
         page={safePage}
