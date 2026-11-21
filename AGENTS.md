@@ -132,6 +132,7 @@ src/
     Pagination.jsx       -- Page controls (admin appointments)
     admin/
       AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination, details dialog)
+      AdminClinics.jsx      -- Clinic add, edit, delete
       AdminDepartments.jsx  -- Department add, edit, delete
       AdminDoctors.jsx      -- Doctor add, edit, delete, search
   layouts/
@@ -222,11 +223,12 @@ The "Find a Doctor" section on the home page uses the same component with
 ### Admin dashboard
 
 - Tabs are buttons: `admin-tab-stats`, `admin-tab-appointments`, `admin-tab-users`,
-  `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
-- Seed departments and doctors are built-in and read-only (their row shows
+  `admin-tab-clinics`, `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
+- Seed clinics, departments and doctors are built-in and read-only (their row shows
   `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
   edited or deleted.
-- Department names are unique (case-insensitive). A doctor is unique per name, clinic
+- Clinic and department names are unique (case-insensitive). A clinic with doctors
+  assigned cannot be deleted. A doctor is unique per name, clinic
   and department. A department with doctors assigned cannot be deleted.
 - Result messages show in `admin-success` or `admin-error`. They clear on tab change.
 - Appointments: 10 rows per page. Search matches patient name, patient email, doctor,
@@ -256,7 +258,13 @@ The "Find a Doctor" section on the home page uses the same component with
 | `admin-appointments-pagination`          | Pagination wrapper (hidden when no rows)  |
 | `admin-appointments-pagination-summary`  | "Showing 1 to 10 of 23 results"           |
 | `admin-appointments-page-{n}`, `-page-prev`, `-page-next` | Page buttons             |
-| `admin-add-dept-btn`, `admin-add-doc-btn` | Open the add dialog                      |
+| `admin-add-clinic-btn`, `admin-add-dept-btn`, `admin-add-doc-btn` | Open the add dialog |
+| `add-clinic-modal`, `edit-clinic-modal`  | Clinic dialogs (`-close`, `-title`)       |
+| `new-clinic-name-input`, `edit-clinic-name-input` | Clinic name field                |
+| `add-clinic-submit`, `add-clinic-cancel`, `edit-clinic-submit`, `edit-clinic-cancel` | Clinic dialog buttons |
+| `clinic-item-{id}`, `clinic-name-{id}`, `clinic-doctor-count-{id}` | Clinic row and cells |
+| `clinic-builtin-{id}`                    | Built-in label on a seed clinic row       |
+| `admin-edit-clinic-{id}`, `admin-delete-clinic-{id}` | Clinic row actions            |
 | `add-dept-modal`, `edit-dept-modal`      | Department dialogs (`-close`, `-title`)   |
 | `new-dept-name-input`, `edit-dept-name-input` | Department name field                |
 | `add-dept-submit`, `add-dept-cancel`, `edit-dept-submit`, `edit-dept-cancel` | Department dialog buttons |
