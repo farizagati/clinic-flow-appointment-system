@@ -166,8 +166,8 @@ src/
 - Other open tabs pick up changes (session, users, appointments, clinics, departments,
   doctors) through the `storage` event, without a reload. The event fires only in the
   other tabs, never in the tab that wrote.
-- Department and doctor changes are applied on top of the stored lists, so changes
-  saved from two admin tabs are all kept.
+- Clinic, department, doctor and user changes are written on top of the stored lists,
+  so records added from different admin tabs are all saved.
 - To test two users at once, use two browser contexts (separate storage).
 
 ### Mock doctors
@@ -237,7 +237,7 @@ The "Find a Doctor" section on the home page uses the same component with
 - Tabs are buttons: `admin-tab-stats`, `admin-tab-appointments`, `admin-tab-users`,
   `admin-tab-clinics`, `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
 - Seed clinics, departments and doctors are built-in and read-only (their row shows
-  `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
+  `clinic-builtin-{id}`, `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
   edited or deleted.
 - Clinic and department names are unique (case-insensitive). A clinic with doctors
   assigned cannot be deleted. A doctor is unique per name, clinic
