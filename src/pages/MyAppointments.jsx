@@ -6,6 +6,9 @@ import CustomDateRangePicker from '../components/CustomDateRangePicker';
 import { parseISO, startOfDay } from 'date-fns';
 
 const ITEMS_PER_PAGE = 5;
+// The statuses an appointment can have. Same list as the admin status filter.
+const STATUSES = ['Pending', 'Approved', 'Cancelled'];
+const emptyStatusFilter = () => Object.fromEntries(STATUSES.map((s) => [s, false]));
 
 export default function MyAppointments() {
   const { appointments, currentUser, cancelAppointment, departments } = useAuth();
@@ -27,14 +30,14 @@ export default function MyAppointments() {
     dateRange: { from: undefined, to: undefined },
     department: '',
     doctor: '',
-    status: { Confirmed: false, Scheduled: false, Pending: false, Cancelled: false }
+    status: emptyStatusFilter()
   });
 
   const [appliedFilters, setAppliedFilters] = useState({
     dateRange: { from: undefined, to: undefined },
     department: '',
     doctor: '',
-    status: { Confirmed: false, Scheduled: false, Pending: false, Cancelled: false }
+    status: emptyStatusFilter()
   });
 
   // Filter appointments belonging to the logged-in member
@@ -71,7 +74,7 @@ export default function MyAppointments() {
         dateRange: { from: undefined, to: undefined },
         department: '',
         doctor: '',
-        status: { Confirmed: false, Scheduled: false, Pending: false, Cancelled: false }
+        status: emptyStatusFilter()
       };
       setTempFilters(resetVal);
       setAppliedFilters(resetVal);
@@ -126,12 +129,9 @@ export default function MyAppointments() {
       (key) => appliedFilters.status[key]
     );
     if (activeStatuses.length > 0) {
-      const isMatch = activeStatuses.some((statusName) => {
-        if (statusName === 'Confirmed' && (apt.status === 'Confirmed' || apt.status === 'Approved')) {
-          return true;
-        }
-        return apt.status?.toLowerCase() === statusName.toLowerCase();
-      });
+      const isMatch = activeStatuses.some(
+        (statusName) => apt.status?.toLowerCase() === statusName.toLowerCase()
+      );
       if (!isMatch) {
         return false;
       }
@@ -267,7 +267,7 @@ export default function MyAppointments() {
             <div className="flex flex-col gap-xs">
               <span id="filter-status-label" className="font-label-md text-on-surface-variant font-medium">Status</span>
               <div role="group" aria-labelledby="filter-status-label" data-testid="filter-status" className="flex flex-wrap gap-2 mt-1">
-                {['Confirmed', 'Scheduled', 'Pending', 'Cancelled'].map((statusName) => (
+                {STATUSES.map((statusName) => (
                   <label key={statusName} className="flex items-center gap-1 cursor-pointer">
                     <input
                       type="checkbox"

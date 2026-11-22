@@ -301,7 +301,7 @@ export default function UserSettings() {
               <h2 data-testid="settings-profile-name" className="font-headline-sm text-headline-sm text-on-background mb-xs">
                 {viewMode === 'edit' ? editName : (currentUser?.name || 'Alexia Sterling')}
               </h2>
-              <p className="font-body-sm text-body-sm text-secondary mb-xl">Patient ID: #CF-8829</p>
+              <p data-testid="settings-account-id" className="font-body-sm text-body-sm text-secondary mb-xl">Account ID: {currentUser?.id}</p>
               
               {viewMode === 'view' && (
                 <div className="w-full flex flex-col gap-sm">

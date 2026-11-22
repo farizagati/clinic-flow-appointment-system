@@ -76,6 +76,21 @@ up with a single `npm run dev` for test automation purposes.
 Do not add new npm packages without explicit user approval. The current stack
 (React 19, react-router-dom 7, Vite 6, Tailwind 3) is intentionally lean.
 
+### 7. Do not fix bugs without confirmation
+
+Some behavior in this app is deliberately imperfect, so testers have something to find.
+Work here focuses on unfinished flows (features that are partly built or missing), not
+on bug fixing.
+
+- Do not fix a bug, validation gap or odd behavior on your own, even when it looks
+  clearly wrong. List what you found and ask the user before changing anything.
+- Change behavior only after the user confirms that specific change.
+- Never describe a suspected or known bug in anything committed or published:
+  documentation, code comments, test ideas, commit messages, branch names, pull request
+  titles or descriptions, and issue text. Report findings to the user in chat only.
+- When a confirmed fix is committed, the message says what the code does now, not what
+  was wrong before.
+
 ---
 
 ## Quick Reference
@@ -116,9 +131,11 @@ src/
     ConfirmDialog.jsx    -- Confirm step for destructive actions
     Pagination.jsx       -- Page controls (admin appointments)
     admin/
-      AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination)
+      AdminAppointments.jsx -- Admin appointment list (search, status filter, pagination, details dialog)
+      AdminClinics.jsx      -- Clinic add, edit, delete
       AdminDepartments.jsx  -- Department add, edit, delete
       AdminDoctors.jsx      -- Doctor add, edit, delete, search
+      AdminUsers.jsx        -- User add, edit, delete, search
   layouts/
     Layout.jsx           -- Page shell (header, nav, footer)
     Navigation.jsx       -- Top navbar and mobile menu
@@ -129,7 +146,7 @@ src/
     BookAppointment.jsx  -- Appointment booking (cascading dropdowns, doctor search)
     ReviewAppointment.jsx -- Booking review and confirm step
     MyAppointments.jsx   -- Patient appointment list (debounced search, filters, pagination)
-    AdminDashboard.jsx   -- Admin panel shell (tabs, stats, users)
+    AdminDashboard.jsx   -- Admin panel shell (tabs, stats)
     UserSettings.jsx     -- Profile, password, purge data
     InfoPage.jsx         -- Footer info pages (privacy, terms, support, help)
   services/
@@ -141,6 +158,17 @@ src/
 ---
 
 ## Testing Notes
+
+### Multiple tabs
+
+- All tabs of one browser share localStorage, so they share one session. Logging in or
+  out in one tab applies to the others too.
+- Other open tabs pick up changes (session, users, appointments, clinics, departments,
+  doctors) through the `storage` event, without a reload. The event fires only in the
+  other tabs, never in the tab that wrote.
+- Clinic, department, doctor and user changes are written on top of the stored lists,
+  so records added from different admin tabs are all saved.
+- To test two users at once, use two browser contexts (separate storage).
 
 ### Mock doctors
 
@@ -207,17 +235,28 @@ The "Find a Doctor" section on the home page uses the same component with
 ### Admin dashboard
 
 - Tabs are buttons: `admin-tab-stats`, `admin-tab-appointments`, `admin-tab-users`,
-  `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
-- Seed departments and doctors are built-in and read-only (their row shows
-  `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
+  `admin-tab-clinics`, `admin-tab-departments`, `admin-tab-doctors`. The active tab has `aria-current="page"`.
+- Seed clinics, departments and doctors are built-in and read-only (their row shows
+  `clinic-builtin-{id}`, `dept-builtin-{id}` or `doc-builtin-{id}`). Only records created by the admin can be
   edited or deleted.
-- Department names are unique (case-insensitive). A doctor is unique per name, clinic
+- Clinic and department names are unique (case-insensitive). A clinic with doctors
+  assigned cannot be deleted. A doctor is unique per name, clinic
   and department. A department with doctors assigned cannot be deleted.
 - Result messages show in `admin-success` or `admin-error`. They clear on tab change.
 - Appointments: 10 rows per page. Search matches patient name, patient email, doctor,
   clinic and department. Approve and Cancel apply immediately.
+- Every appointment row has a View button (`admin-view-{id}`, named "View details for
+  {patient name}"), also on Cancelled rows. It opens the `admin-apt-detail-modal` dialog
+  with all booking fields, including the patient notes. Approve and Cancel inside the
+  dialog apply immediately and the dialog stays open showing the new status.
 - Add and edit forms are dialogs (`getByRole('dialog')` works). Escape closes them.
   Field errors use `{input-testid}-error`.
+- Users: search matches name and email (case-insensitive substring). Add and edit use
+  the Register rules: name required, valid email, email unique (case-insensitive),
+  password at least 8 characters. On edit a blank password keeps the current one. The
+  logged-in admin's row shows `user-self-{id}` ("You") and has no delete button, and
+  the role select is disabled when they edit themselves. Deleting a user keeps their
+  appointments.
 
 | data-testid                              | Element                                   |
 | ---------------------------------------- | ----------------------------------------- |
@@ -227,11 +266,23 @@ The "Find a Doctor" section on the home page uses the same component with
 | `admin-appointment-item-{id}`            | Appointment row                           |
 | `admin-apt-status-{id}`                  | Status badge                              |
 | `admin-approve-{id}`, `admin-cancel-{id}` | Row actions                              |
+| `admin-view-{id}`                        | Opens the appointment details dialog      |
+| `admin-cancelled-label-{id}`             | Actions placeholder on Cancelled rows     |
+| `admin-apt-detail-modal`                 | Details dialog (`-title`, `-close`)       |
+| `admin-apt-detail-{field}`               | Value cells: `id`, `patient-name`, `patient-email`, `clinic`, `department`, `doctor`, `date`, `time`, `status`, `notes`, `created` |
+| `admin-apt-detail-approve`, `admin-apt-detail-cancel` | Dialog actions (Approve only when Pending, Cancel when not Cancelled) |
+| `admin-apt-detail-close-btn`             | Dialog Close button                       |
 | `admin-no-appointments`, `admin-no-matching-appointments` | Empty states             |
 | `admin-appointments-pagination`          | Pagination wrapper (hidden when no rows)  |
 | `admin-appointments-pagination-summary`  | "Showing 1 to 10 of 23 results"           |
 | `admin-appointments-page-{n}`, `-page-prev`, `-page-next` | Page buttons             |
-| `admin-add-dept-btn`, `admin-add-doc-btn` | Open the add dialog                      |
+| `admin-add-clinic-btn`, `admin-add-dept-btn`, `admin-add-doc-btn` | Open the add dialog |
+| `add-clinic-modal`, `edit-clinic-modal`  | Clinic dialogs (`-close`, `-title`)       |
+| `new-clinic-name-input`, `edit-clinic-name-input` | Clinic name field                |
+| `add-clinic-submit`, `add-clinic-cancel`, `edit-clinic-submit`, `edit-clinic-cancel` | Clinic dialog buttons |
+| `clinic-item-{id}`, `clinic-name-{id}`, `clinic-doctor-count-{id}` | Clinic row and cells |
+| `clinic-builtin-{id}`                    | Built-in label on a seed clinic row       |
+| `admin-edit-clinic-{id}`, `admin-delete-clinic-{id}` | Clinic row actions            |
 | `add-dept-modal`, `edit-dept-modal`      | Department dialogs (`-close`, `-title`)   |
 | `new-dept-name-input`, `edit-dept-name-input` | Department name field                |
 | `add-dept-submit`, `add-dept-cancel`, `edit-dept-submit`, `edit-dept-cancel` | Department dialog buttons |
@@ -247,13 +298,24 @@ The "Find a Doctor" section on the home page uses the same component with
 | `admin-no-matching-doctors`              | Doctor search empty state                 |
 | `confirm-dialog`, `confirm-dialog-message` | Delete confirmation                     |
 | `confirm-dialog-confirm`, `confirm-dialog-cancel` | Confirmation buttons             |
-| `user-item-{id}`, `user-role-{id}`       | User row and role badge                   |
+| `user-item-{id}`, `user-name-{id}`, `user-email-{id}`, `user-role-{id}` | User row, cells and role badge |
+| `user-self-{id}`                         | "You" label on the logged-in admin's row  |
+| `admin-users-search`                     | User name and email search input          |
+| `admin-no-matching-users`                | User search empty state                   |
+| `admin-add-user-btn`                     | Open the add user dialog                  |
+| `add-user-modal`, `edit-user-modal`      | User dialogs (`-close`, `-title`)         |
+| `new-user-name-input`, `new-user-email-input`, `new-user-password-input`, `new-user-role-select` | Add user fields |
+| `edit-user-name-input`, `edit-user-email-input`, `edit-user-password-input`, `edit-user-role-select` | Edit user fields |
+| `edit-user-role-select-hint`             | Shown when the admin edits their own row  |
+| `add-user-submit`, `add-user-cancel`, `edit-user-submit`, `edit-user-cancel` | User dialog buttons |
+| `admin-edit-user-{id}`, `admin-delete-user-{id}` | User row actions                  |
 
 ### Appointment filters (My Appointments)
 
 - `filter-date-range-toggle` is a button named "Date range: {from} to {to}"
   ("Start date" and "End date" when empty). It has `aria-expanded`.
-- The status checkboxes sit in a group named "Status" (`filter-status`).
+- The status checkboxes sit in a group named "Status" (`filter-status`):
+  `status-checkbox-pending`, `status-checkbox-approved`, `status-checkbox-cancelled`.
 - The search input is labelled "Search appointments".
 
 ### Navigation
