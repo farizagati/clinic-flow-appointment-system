@@ -5,6 +5,7 @@ import { TIME_SLOTS } from '../data/mockData';
 import { FieldError } from '../components/FieldError';
 import CustomDatePicker from '../components/CustomDatePicker';
 import SearchDropdown from '../components/SearchDropdown';
+import { format } from 'date-fns';
 
 export default function BookAppointment() {
   const { clinics, departments, doctors } = useAuth();
@@ -65,14 +66,9 @@ export default function BookAppointment() {
     if (!date) {
       errors.date = 'Please select an appointment date';
       valid = false;
-    } else {
-      const selectedDate = new Date(date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (selectedDate < today) {
-        errors.date = 'Appointment date cannot be in the past';
-        valid = false;
-      }
+    } else if (date < format(new Date(), 'yyyy-MM-dd')) {
+      errors.date = 'Appointment date cannot be in the past';
+      valid = false;
     }
     if (!time) {
       errors.time = 'Please select a time slot';
